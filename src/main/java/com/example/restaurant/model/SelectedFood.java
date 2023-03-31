@@ -1,4 +1,4 @@
-package com.example.restaurant.Entity;
+package com.example.restaurant.model;
 
 import java.util.Date;
 
@@ -25,11 +25,11 @@ public class SelectedFood {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "QUANTITY", columnDefinition = "int default 1", precision = 10, scale = 2)
-	private int quantity;
+	@Column(name = "QUANTITY", columnDefinition = "int default 1")
+	private Long quantity;
 
-	@Column(name = "QUANTITY_AMOUNT", precision = 10, scale = 2)
-	private double quantityAmount;
+	//@Column(name = "QUANTITY_AMOUNT", precision = 10, scale = 2)
+	//private BigDecimal quantityAmount;
 	
 
 	// multiple food selected
@@ -40,7 +40,7 @@ public class SelectedFood {
 	// multiple food will be one order
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "ORDER_ID")
-	private Orders order;
+	private Order order;
 
 	@CreationTimestamp
 	@Temporal(TemporalType.DATE)
@@ -60,21 +60,21 @@ public class SelectedFood {
 		this.id = id;
 	}
 
-	public int getQuantity() {
+	public Long getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(int quantity) {
+	public void setQuantity(Long quantity) {
 		this.quantity = quantity;
 	}
 
-	public double getQuantityAmount() {
+	/*public BigDecimal getQuantityAmount() {
 		return quantityAmount;
 	}
 
-	public void setQuantityAmount(double quantityAmount) {
+	public void setQuantityAmount(BigDecimal quantityAmount) {
 		this.quantityAmount = quantityAmount;
-	}
+	}*/
 
 	public Menu getMenu() {
 		return menu;
@@ -84,11 +84,11 @@ public class SelectedFood {
 		this.menu = menu;
 	}
 
-	public Orders getOrder() {
+	public Order getOrder() {
 		return order;
 	}
 
-	public void setOrder(Orders order) {
+	public void setOrder(Order order) {
 		this.order = order;
 	}
 

@@ -1,13 +1,13 @@
-package com.example.restaurant.service.OrderService;
+package com.example.restaurant.service.orderService;
 
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.restaurant.Entity.Customer;
-import com.example.restaurant.Entity.Orders;
-import com.example.restaurant.Entity.PaymentMode;
+import com.example.restaurant.model.Customer;
+import com.example.restaurant.model.Order;
+import com.example.restaurant.model.PaymentMode;
 import com.example.restaurant.repository.CustomerRepository;
 import com.example.restaurant.repository.OrderRepository;
 import com.example.restaurant.repository.PaymentModeRepository;
@@ -26,7 +26,7 @@ public class OrderServiceImpl {
 	@Autowired
 	private PaymentModeRepository payment;
 	
-	 public Optional<Orders> getOrderById(Long orderId) {
+	 public Optional<Order> getOrderById(Long orderId) {
 	        return order.findById(orderId);
 	    }
 	

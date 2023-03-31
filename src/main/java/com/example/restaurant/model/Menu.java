@@ -1,4 +1,4 @@
-package com.example.restaurant.Entity;
+package com.example.restaurant.model;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -33,14 +33,14 @@ public class Menu {
 	@Column(name = "DESCRIPTION")
 	private String description;
 
-	@Column(name = "AMOUNT",precision = 10,scale = 2)
-	private BigDecimal amount;
+	@Column(name = "PRICE",precision = 10,scale = 2)
+	private BigDecimal price;
 	
 	@Column(name = "IS_ACTIVE")
 	private Boolean isActive;
 	
 	@OneToMany(mappedBy = "menu", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<SelectedFood> food = new ArrayList<>();
+    private List<SelectedFood> food;
 
 	@CreationTimestamp
 	@Temporal(TemporalType.DATE)
@@ -77,11 +77,11 @@ public class Menu {
 	}
 
 	public BigDecimal getAmount() {
-		return amount;
+		return price;
 	}
 
 	public void setAmount(BigDecimal amount) {
-		this.amount = amount;
+		this.price = amount;
 	}
 
 	public Boolean getIsActive() {

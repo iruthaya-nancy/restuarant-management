@@ -1,6 +1,5 @@
-package com.example.restaurant.Entity;
+package com.example.restaurant.model;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -20,11 +19,10 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 
-// final table
-// mode one to one order
+
 @Entity
-@Table(name = "ORDER")//
-public class Orders {
+@Table(name = "ORDERs")//
+public class Order {
 	@Id
 	@Column(name = "ID",unique = true,nullable = false)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,23 +38,67 @@ public class Orders {
 	
 	// mode of payment
 	 @OneToOne(cascade = CascadeType.ALL)
-	 @JoinColumn(name = "PAYMENT_ID")
+	 @JoinColumn(name = "PAYMENT_MODE_ID")
 	 private PaymentMode mode;
 	 
 	 //one order with many food
 	 @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-	 private List<SelectedFood> items = new ArrayList<>();
+	 private List<SelectedFood> items;
 	
 	
 	@CreationTimestamp
 	@Temporal(TemporalType.DATE)
-	@Column(name = "CREATE_DATE")
+	@Column(name = "CREATED_AT")
 	private Date createDate;
 
 	@UpdateTimestamp
 	@Temporal(TemporalType.DATE)
-	@Column(name = "MODIFY_DATE")
+	@Column(name = "MODIFIED_AT")
 	private Date modifyDate;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Long getTotalAmount() {
+		return totalAmount;
+	}
+
+	public void setTotalAmount(Long totalAmount) {
+		this.totalAmount = totalAmount;
+	}
+
+	public Customer getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
+	}
+
+	public PaymentMode getMode() {
+		return mode;
+	}
+
+	public void setMode(PaymentMode mode) {
+		this.mode = mode;
+	}
+
+	public List<SelectedFood> getItems() {
+		return items;
+	}
+
+	public void setItems(List<SelectedFood> items) {
+		this.items = items;
+	}
+	
+	// final table
+	// mode one to one order
+	
 	
 
 }
