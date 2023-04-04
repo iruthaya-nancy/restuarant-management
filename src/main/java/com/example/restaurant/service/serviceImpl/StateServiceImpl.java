@@ -1,4 +1,4 @@
-package com.example.restaurant.service.stateSevice;
+package com.example.restaurant.service.serviceImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

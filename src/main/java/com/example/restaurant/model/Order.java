@@ -21,7 +21,7 @@ import jakarta.persistence.TemporalType;
 
 
 @Entity
-@Table(name = "ORDERs")//
+@Table(name = "ORDERS")
 public class Order {
 	@Id
 	@Column(name = "ID",unique = true,nullable = false)
@@ -72,13 +72,14 @@ public class Order {
 		this.totalAmount = totalAmount;
 	}
 
-	public Customer getCustomer() {
+	public Customer sgetCustomer() {
 		return customer;
 	}
 
 	public void setCustomer(Customer customer) {
 		this.customer = customer;
 	}
+	
 
 	public PaymentMode getMode() {
 		return mode;
@@ -95,9 +96,12 @@ public class Order {
 	public void setItems(List<SelectedFood> items) {
 		this.items = items;
 	}
-	
-	// final table
-	// mode one to one order
+
+	public Order() {}
+	public Order(Long id) {
+		super();
+		this.id = id;
+	}
 	
 	
 

@@ -19,7 +19,13 @@ public class Area {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(name = "AREA",unique = true,nullable = false)
+	@Column(name = "DOOR_NO",unique = true,nullable = false)
+	private String doorNo;
+	
+	@Column(name  = "STREET_NAME",length = 100,unique = true,nullable = false)
+	private String streetName;
+	
+	@Column(name = "NAME",unique = true,nullable = false)
 	private String name;
 	
 	@Column(name = "PINCODE", unique = true,nullable = false)
@@ -39,6 +45,22 @@ public class Area {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	public String getDoorNo() {
+		return doorNo;
+	}
+
+	public void setDoorNo(String doorNo) {
+		this.doorNo = doorNo;
+	}
+
+	public String getStreetName() {
+		return streetName;
+	}
+
+	public void setStreetName(String streetName) {
+		this.streetName = streetName;
 	}
 
 	public String getName() {
@@ -65,19 +87,21 @@ public class Area {
 		this.isActive = isActive;
 	}
 
-		public Customer getCustomer1() {
+	public Customer getCustomer() {
 		return customer;
 	}
 
-	public void setCustomer1(Customer customer1) {
+	public void setCustomer(Customer customer1) {
 		this.customer = customer1;
 	}
 	
 	
-	public Area(Long id, String area, Long pincode, Boolean isActive) {
+	public Area(Long id, String doorNo,String streetName,String name, Long pincode, Boolean isActive) {
 		super();
 		this.id = id;
-		this.name = area;
+		this.doorNo = doorNo;
+		this.streetName = streetName;
+		this.name = name;
 		this.pincode = pincode;
 		this.isActive = isActive;
 	}

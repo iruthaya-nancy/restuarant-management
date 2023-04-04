@@ -1,13 +1,11 @@
 package com.example.restaurant.model;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
-import com.example.restaurant.dto.AddressDto;
+import org.springframework.data.annotation.CreatedDate;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -18,6 +16,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -26,7 +25,7 @@ import jakarta.validation.constraints.Size;
 
 
 @Entity
-@Table(name = "CUSTOMER_DETAILS")
+@Table(name = "CUSTOMER")
 public class Customer {
 	@Id
 	@Column(name = "ID",unique = true,nullable = false)
@@ -50,11 +49,11 @@ public class Customer {
 	@Size(max = 10, message = "Phone number must be at most {max} characters long")
 	private String phoneNumber;
 	
-	@Column(name = "DOOR_NO",length = 20,unique= true,nullable = false)
-	private String doorNo;
+	//@Column(name = "DOOR_NO",length = 20,unique= true,nullable = false)
+	//private String doorNo;
 	
-	@Column(name = "STREET_NAME",length = 50,nullable = false)
-	private String street;
+	//@Column(name = "STREET_NAME",length = 50,nullable = false)
+	//private String street;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "customer")
 	private List<Area> address;
@@ -75,11 +74,17 @@ public class Customer {
     private Order order;
 	
 		
-	@CreationTimestamp
-	@Temporal(TemporalType.DATE)
-	@Column(name = "CREATED_AT")
-	private Date createDate;
-
+	//@CreationTimestamp
+	//@Temporal(TemporalType.DATE)
+	//@Column(name = "CREATED_AT")
+	//private Date createDate;
+	//@CreationTimestamp
+	@CreatedDate
+	 @Column(name ="CREATED_AT")
+	 @Temporal(TemporalType.DATE)
+	 private Date createDate;
+	 
+	
 	@UpdateTimestamp
 	@Temporal(TemporalType.DATE)
 	@Column(name = "MODIFIED_AT")
@@ -133,7 +138,7 @@ public class Customer {
 		this.phoneNumber = phoneNumber;
 	}
 
-	public String getDoorNo() {
+	/*public String getDoorNo() {
 		return doorNo;
 	}
 
@@ -147,7 +152,7 @@ public class Customer {
 
 	public void setStreet(String street) {
 		this.street = street;
-	}
+	}*/
 
 	public List<Area> getAddress() {
 		return address;
@@ -181,11 +186,15 @@ public class Customer {
 		this.order = order;
 	}
 	
+	public Customer(Long id) {
+		this.id = id;
+	}
+	
 	
 	public Customer(Long id, String firstName, String lastName, String password,
 			@Email(message = "Invalid email address") String email,
 			@Size(max = 10, message = "Phone number must be at most {max} characters long") String phoneNumber,
-			String doorNo, String street, List<Area> address, List<District> district, List<State> state) {
+			String doorNo, String street) {
 		super();
 		this.id = id;
 		this.firstName = firstName;
@@ -193,11 +202,12 @@ public class Customer {
 		this.password = password;
 		this.email = email;
 		this.phoneNumber = phoneNumber;
-		this.doorNo = doorNo;
-		this.street = street;
-		this.address = address;
-		this.district = district;
-		this.state = state;
+		//this.doorNo = doorNo;
+		//this.street = street;
+		//this.address = address;
+		//this.district = district;
+		//this.state = state;
+		//List<Area> address, List<District> district, List<State> state
 	}
 
 	public Customer() {

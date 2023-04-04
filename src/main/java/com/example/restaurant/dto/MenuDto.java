@@ -12,6 +12,7 @@ public class MenuDto {
 	private BigDecimal amount;
 	private Boolean isActive;
 	private List<SelectedFood> food;
+	
 	public Long getId() {
 		return id;
 	}

@@ -99,6 +99,15 @@ public class Menu {
 	public void setFood(List<SelectedFood> food) {
 		this.food = food;
 	}
+
+	public Menu(Long id) {
+		super();
+		this.id = id;
+	}
+	
+	public Menu() {}
+	
+	
 	
 	
 }

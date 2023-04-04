@@ -1,28 +1,36 @@
-package com.example.restaurant.service.customerService;
+package com.example.restaurant.service.serviceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.example.restaurant.dto.AddressDto;
+import com.example.restaurant.dto.AreaDto;
 import com.example.restaurant.dto.CustomerDto;
 import com.example.restaurant.dto.DistrictDto;
 import com.example.restaurant.dto.MenuDto;
+import com.example.restaurant.dto.OrderDto;
+import com.example.restaurant.dto.SelectedFoodDto;
 import com.example.restaurant.dto.StateDto;
 import com.example.restaurant.model.Area;
 import com.example.restaurant.model.Customer;
 import com.example.restaurant.model.District;
 import com.example.restaurant.model.Menu;
+import com.example.restaurant.model.SelectedFood;
 import com.example.restaurant.model.State;
+import com.example.restaurant.model.Order;
 import com.example.restaurant.repository.AddressRepository;
 import com.example.restaurant.repository.CustomerRepository;
 import com.example.restaurant.repository.DistrictRepository;
 import com.example.restaurant.repository.MenuRepository;
+import com.example.restaurant.repository.OrderRepository;
+import com.example.restaurant.repository.SelectedFoodRepository;
 import com.example.restaurant.repository.StateRepository;
+import com.example.restaurant.service.CustomerService;
 
 import jakarta.transaction.Transactional;
 
@@ -31,6 +39,9 @@ public class CustomerServiceImpl implements CustomerService{
 	@Autowired
 	public CustomerRepository customerRepo;
 
+	@Autowired
+	public OrderRepository orderRepo;
+	
 	@Autowired
 	public StateRepository stateRepo;
 
@@ -47,7 +58,10 @@ public class CustomerServiceImpl implements CustomerService{
 	public ModelMapper modelMapper;
 
 	@Autowired
-	private PasswordEncoder passwordEncoder;
+	public PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	public SelectedFoodRepository selectedFoodRepo;
 
 	@Transactional // signup
 	public void insertCustomer(CustomerDto customerdto) {
@@ -61,16 +75,16 @@ public class CustomerServiceImpl implements CustomerService{
 		customer.setPassword(hashedPassword);
 		customer.setEmail(customerdto.getEmail());
 		customer.setPhoneNumber(customerdto.getPhoneNumber());
-		customer.setDoorNo(customerdto.getDoorNo());
-		customer.setStreet(customerdto.getStreet());
+		//customer.setDoorNo(customerdto.getDoorNo());
+		//customer.setStreet(customerdto.getStreet());
 		customerRepo.save(customer);
 		// for address
-		List<AddressDto> addressDtos = customerdto.getAddress();
+		List<AreaDto> addressDtos = customerdto.getAddress();
 		if (addressDtos != null && !addressDtos.isEmpty()) {
 			List<Area> addresses = new ArrayList<>();
-			for (AddressDto addressDto : addressDtos) {
+			for (AreaDto addressDto : addressDtos) {
 				Area address = this.modelMapper.map(addressDto, Area.class);
-				address.setCustomer1(customer);
+				address.setCustomer(customer);
 				addresses.add(address);
 				addressRepo.save(address);
 			}
@@ -132,7 +146,36 @@ public class CustomerServiceImpl implements CustomerService{
 
 		return menu;
 	}
-	//add items to selected food
+	//add items to selected food to view another api
+	public void selectTheFoodItem(Long id) {
+		Optional<Menu> menuItem = menuRepo.findById(id);
+		//List<SelectedFoodDto> selectFood = new ArrayList<>();
+		if(menuItem!=null) {
+		SelectedFoodDto sdto = new SelectedFoodDto();
+		OrderDto order = new OrderDto();
+		Order o = new Order();
+		Menu menu = menuItem.get();
+		MenuDto dto = new MenuDto();
+		o.setId(id);
+		orderRepo.save(o);
+		dto.setId(menu.getId());
+			if(id.equals(dto.getId())){
+				SelectedFood s = new SelectedFood();
+				s.setMenu(new Menu(dto.getId()));
+				s.setQuantity(sdto.getQuantity());
+				s.setOrder(new Order(order.getId()));
+				selectedFoodRepo.save(s);
+			}
+			
+		}
+		
+	}
+	
+	public void toDeleteOrder(Long id) {
+		orderRepo.deleteById(id);
+	}
+	
+	
 
 
 }

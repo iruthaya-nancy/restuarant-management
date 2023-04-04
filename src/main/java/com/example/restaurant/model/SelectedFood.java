@@ -35,6 +35,7 @@ public class SelectedFood {
 	// multiple food selected
 	@ManyToOne
 	@JoinColumn(name = "MENU_ID")
+	//private Menu menu;
 	private Menu menu;
 
 	// multiple food will be one order
@@ -74,7 +75,7 @@ public class SelectedFood {
 
 	public void setQuantityAmount(BigDecimal quantityAmount) {
 		this.quantityAmount = quantityAmount;
-	}*/
+	}
 
 	public Menu getMenu() {
 		return menu;
@@ -82,10 +83,20 @@ public class SelectedFood {
 
 	public void setMenu(Menu menu) {
 		this.menu = menu;
-	}
+	}*/
+	
+	
 
 	public Order getOrder() {
 		return order;
+	}
+
+	public Menu getMenu() {
+		return menu;
+	}
+
+	public void setMenu(Menu menu) {
+		this.menu = menu;
 	}
 
 	public void setOrder(Order order) {
@@ -99,6 +110,18 @@ public class SelectedFood {
 	public void setModifyDate(Date modifyDate) {
 		this.modifyDate = modifyDate;
 	}
+	
+	public SelectedFood() {}
+
+	public SelectedFood(Long id, Long quantity, Menu menu, Order order) {
+		super();
+		this.id = id;
+		this.quantity = quantity;
+		this.menu = menu;
+		this.order = order;
+	}
+	
+	
 	
 	
 }

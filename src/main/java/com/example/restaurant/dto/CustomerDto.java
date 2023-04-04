@@ -9,9 +9,9 @@ public class CustomerDto {
 	 private String password;
 	 private String email;
 	 private String phoneNumber;
-	 private String doorNo;
-	 private String street;
-	 private List<AddressDto> address;
+	 //private String doorNo;
+	 //private String street;
+	 private List<AreaDto> address;
 	 private List<DistrictDto> district;
 	 private List<StateDto> state;
 	 
@@ -51,7 +51,7 @@ public class CustomerDto {
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
-	public String getDoorNo() {
+	/*public String getDoorNo() {
 		return doorNo;
 	}
 	public void setDoorNo(String doorNo) {
@@ -62,12 +62,12 @@ public class CustomerDto {
 	}
 	public void setStreet(String street) {
 		this.street = street;
-	}
+	}*/
 	
-	public List<AddressDto> getAddress() {
+	public List<AreaDto> getAddress() {
 		return address;
 	}
-	public void setAddress(List<AddressDto> address) {
+	public void setAddress(List<AreaDto> address) {
 		this.address = address;
 	}
 	public List<DistrictDto> getDistrict() {
@@ -84,11 +84,13 @@ public class CustomerDto {
 	}
 	
 	
-	public void addAddressDTO(AddressDto addressDTO) {
+	public void addAddressDTO(AreaDto addressDTO) {
         this.address.add(addressDTO);
     }
+	
+	public CustomerDto() {}
 	public CustomerDto(Long id, String firstName, String lastName, String password, String email,
-			String phoneNumber, String doorNo, String street) {/*, List<AddressDto> address, DistrictDto district,
+			String phoneNumber){/* {, String doorNo, String street) {/*, List<AddressDto> address, DistrictDto district,
 			StateDto state) {*/
 		super();
 		this.id = id;
@@ -97,8 +99,8 @@ public class CustomerDto {
 		this.password = password;
 		this.email = email;
 		this.phoneNumber = phoneNumber;
-		this.doorNo = doorNo;
-		this.street = street;
+		//this.doorNo = doorNo;
+		//this.street = street;
 		//this.address = address;
 		//this.district = district;
 		//this.state = state;

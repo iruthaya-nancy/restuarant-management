@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 import com.example.restaurant.dto.StateDto;
-import com.example.restaurant.service.stateSevice.StateServiceImpl;
+import com.example.restaurant.service.serviceImpl.StateServiceImpl;
 
 @RestController
 public class StateController {

@@ -1,4 +1,4 @@
-package com.example.restaurant.service.selectedFoodService;
+package com.example.restaurant.service;
 
 import java.math.BigDecimal;
 
