@@ -1,11 +1,11 @@
 package com.example.restaurant.dto;
 
-import com.example.restaurant.model.Customer;
+
 
 public class OrderDto {
 	private Long id;
-	private Long totalAmount;
-	private Long customer;
+	private Double totalAmount;
+	private Long customerId;
 	
 	public Long getId() 
 	{
@@ -14,19 +14,19 @@ public class OrderDto {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public Long getTotalAmount() {
+	public Double getTotalAmount() {
 		return totalAmount;
 	}
-	public void setTotalAmount(Long totalAmount) {
+	public void setTotalAmount(Double totalAmount) {
 		this.totalAmount = totalAmount;
 	}
-	public Long getCustomer() {
-		return customer;
+	public Long getCustomerId() {
+		return customerId;
 	}
-	public void setCustomer(Long customer) {
-		this.customer = customer;
+	public void setCustomerId(Long customer) {
+		this.customerId = customer;
 	}
-	public OrderDto(Long id, Long totalAmount) {
+	public OrderDto(Long id, Double totalAmount) {
 		super();
 		this.id = id;
 		this.totalAmount = totalAmount;

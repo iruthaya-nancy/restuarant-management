@@ -24,12 +24,12 @@ import jakarta.persistence.TemporalType;
 @Table(name = "ORDERS")
 public class Order {
 	@Id
-	@Column(name = "ID",unique = true,nullable = false)
+	@Column(name = "ID")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(name = "TOTAL",nullable = false)// passed from the food menu
-	private Long totalAmount;
+	@Column(name = "TOTAL",columnDefinition="Decimal(10,2) default '0.00'")// passed from the food menu
+	private Double totalAmount;
 	
 	// customer id 
 	@OneToOne
@@ -37,7 +37,7 @@ public class Order {
     private Customer customer;
 	
 	// mode of payment
-	 @OneToOne(cascade = CascadeType.ALL)
+	 @OneToOne
 	 @JoinColumn(name = "PAYMENT_MODE_ID")
 	 private PaymentMode mode;
 	 
@@ -47,14 +47,14 @@ public class Order {
 	
 	
 	@CreationTimestamp
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "CREATED_AT")
-	private Date createDate;
+	private Date createdAt;
 
 	@UpdateTimestamp
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "MODIFIED_AT")
-	private Date modifyDate;
+	private Date modifiedAt;
 
 	public Long getId() {
 		return id;
@@ -64,11 +64,11 @@ public class Order {
 		this.id = id;
 	}
 
-	public Long getTotalAmount() {
+	public Double getTotalAmount() {
 		return totalAmount;
 	}
 
-	public void setTotalAmount(Long totalAmount) {
+	public void setTotalAmount(Double totalAmount) {
 		this.totalAmount = totalAmount;
 	}
 

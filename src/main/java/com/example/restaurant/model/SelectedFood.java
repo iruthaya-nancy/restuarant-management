@@ -21,7 +21,7 @@ import jakarta.persistence.TemporalType;
 @Table(name = "SELECTED_FOOD")
 public class SelectedFood {
 	@Id
-	@Column(name = "ID", unique = true, nullable = false)
+	@Column(name = "ID")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
@@ -33,7 +33,7 @@ public class SelectedFood {
 	
 
 	// multiple food selected
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY )
 	@JoinColumn(name = "MENU_ID")
 	//private Menu menu;
 	private Menu menu;
@@ -44,14 +44,14 @@ public class SelectedFood {
 	private Order order;
 
 	@CreationTimestamp
-	@Temporal(TemporalType.DATE)
-	@Column(name = "CREATE_DATE")
-	private Date createDate;
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "CREATED_AT")
+	private Date createdAt;
 
 	@UpdateTimestamp
-	@Temporal(TemporalType.DATE)
-	@Column(name = "MODIFY_DATE")
-	private Date modifyDate;
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "MODIFIED_AT")
+	private Date modifiedAt;
 
 	public Long getId() {
 		return id;
@@ -103,13 +103,7 @@ public class SelectedFood {
 		this.order = order;
 	}
 
-	public Date getModifyDate() {
-		return modifyDate;
-	}
-
-	public void setModifyDate(Date modifyDate) {
-		this.modifyDate = modifyDate;
-	}
+	
 	
 	public SelectedFood() {}
 

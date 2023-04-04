@@ -1,6 +1,7 @@
 package com.example.restaurant.Controller;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,9 +17,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.restaurant.dto.LoginDto;
 import com.example.restaurant.dto.MenuDto;
 import com.example.restaurant.model.Menu;
-import com.example.restaurant.service.serviceImpl.MenuServiceImpl;
+import com.example.restaurant.service.impl.MenuServiceImpl;
 
 @RestController
 public class MenuController {
@@ -63,6 +65,11 @@ public class MenuController {
 		menudto.setIsActive(menu.getIsActive());
 		return menudto;
 	}
+	
+	//@GetMapping("/")
+	//public List<FoodSoldDto> toGetCountOfFood(@RequestParam(value = "fromDate") Date fromDate,@RequestParam(value = "toDate")Date toDate){
+		//menuService.toGetTheFoodCount(fromDate,toDate,name);// do i have to pass the name
+	//}
 	
 		
 	

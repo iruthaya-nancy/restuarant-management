@@ -24,10 +24,10 @@ import jakarta.persistence.TemporalType;
 public class Menu {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "ID",unique = true,nullable = false)
+	@Column(name = "ID")
 	private Long id;
 
-	@Column(name = "ITEM")
+	@Column(name = "NAME")
 	private String name;
 
 	@Column(name = "DESCRIPTION")
@@ -38,19 +38,19 @@ public class Menu {
 	
 	@Column(name = "IS_ACTIVE")
 	private Boolean isActive;
-	
-	@OneToMany(mappedBy = "menu", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<SelectedFood> food;
+//	
+//	@OneToMany(mappedBy = "menu", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<SelectedFood> food;
 
 	@CreationTimestamp
-	@Temporal(TemporalType.DATE)
-	@Column(name = "CREATE_DATE")
-	private Date createDate;
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "CREATED_AT")
+	private Date createdAt;
 
 	@UpdateTimestamp
-	@Temporal(TemporalType.DATE)
-	@Column(name = "MODIFY_DATE")
-	private Date modifyDate;
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "MODIFIED_AT")
+	private Date modifiedAt;
 
 	public Long getId() {
 		return id;
@@ -92,13 +92,13 @@ public class Menu {
 		this.isActive = isActive;
 	}
 
-	public List<SelectedFood> getFood() {
-		return food;
-	}
-
-	public void setFood(List<SelectedFood> food) {
-		this.food = food;
-	}
+//	public List<SelectedFood> getFood() {
+//		return food;
+//	}
+//
+//	public void setFood(List<SelectedFood> food) {
+//		this.food = food;
+//	}
 
 	public Menu(Long id) {
 		super();

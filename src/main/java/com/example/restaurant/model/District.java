@@ -19,16 +19,16 @@ public class District {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(name = "NAME",length = 20)
+	@Column(name = "NAME",length = 50)
 	private String name;
 	
 	@Column(name = "IS_ACTIVE")
 	private Boolean isActive;
 	
 		
-	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CUSTOMER_ID")
-	private Customer customer;
+	//@ManyToOne(fetch = FetchType.LAZY)
+    //@JoinColumn(name = "CUSTOMER_ID")
+	//private Customer customer;
 
 	public Long getId() {
 		return id;
@@ -54,14 +54,14 @@ public class District {
 		this.isActive = isActive;
 	}
 
-
-	public Customer getCustomer() {
-		return customer;
-	}
-
-	public void setCustomer(Customer customer) {
-		this.customer = customer;
-	}
+//
+//	public Customer getCustomer() {
+//		return customer;
+//	}
+//
+//	public void setCustomer(Customer customer) {
+//		this.customer = customer;
+//	}
 
 	public District(Long id, String name, Boolean isActive){
 		super();

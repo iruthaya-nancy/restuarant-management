@@ -15,10 +15,13 @@ public class Admin {
 	@Column(name = "ID")
 	private Long id;
 	
-	@Column(name = "NAME",length = 20,nullable = false)
-	private String name;
+	@Column(name = "FIRST_NAME",length = 50)
+	private String firstName;
 	
-	@Column(name = "PASSWORD")
+	@Column(name = "LAST_NAME",length = 50)
+	private String lastName;
+	
+	@Column(name = "PASSWORD",nullable = false)
 	private String password;
 	
 

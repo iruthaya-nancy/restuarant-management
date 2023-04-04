@@ -7,8 +7,6 @@ import com.example.restaurant.model.District;
 
 public class AreaDto {
 	private Long id;
-	private String doorNo;
-	private String streetName;
 	private String name;
 	private Long pincode;
 	private Boolean isActive;
@@ -27,27 +25,27 @@ public class AreaDto {
 
 
 
-	public String getDoorNo() {
-		return doorNo;
-	}
-
-
-
-	public void setDoorNo(String doorNo) {
-		this.doorNo = doorNo;
-	}
-
-
-
-	public String getStreetName() {
-		return streetName;
-	}
-
-
-
-	public void setStreetName(String streetName) {
-		this.streetName = streetName;
-	}
+//	public String getDoorNo() {
+//		return doorNo;
+//	}
+//
+//
+//
+//	public void setDoorNo(String doorNo) {
+//		this.doorNo = doorNo;
+//	}
+//
+//
+//
+//	public String getStreetName() {
+//		return streetName;
+//	}
+//
+//
+//
+//	public void setStreetName(String streetName) {
+//		this.streetName = streetName;
+//	}
 
 
 
@@ -87,12 +85,12 @@ public class AreaDto {
 
 	public AreaDto() {}
 
-	public AreaDto(Long id,String doorNo,String streetName, String area, Long pincode, Boolean isActive) {
+	public AreaDto(Long id, String area, Long pincode, Boolean isActive) {
 		super();
 		this.id = id;
 		this.name = area;
-		this.doorNo = doorNo;
-		this.streetName = streetName;
+		//this.doorNo = doorNo;
+		//this.streetName = streetName;
 		this.pincode = pincode;
 		this.isActive = isActive;
 		

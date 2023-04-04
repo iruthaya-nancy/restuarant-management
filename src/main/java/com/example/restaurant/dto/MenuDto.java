@@ -9,9 +9,8 @@ public class MenuDto {
 	private Long id;
 	private String name;
 	private String description;
-	private BigDecimal amount;
+	private BigDecimal price;
 	private Boolean isActive;
-	private List<SelectedFood> food;
 	
 	public Long getId() {
 		return id;
@@ -32,10 +31,10 @@ public class MenuDto {
 		this.description = description;
 	}
 	public BigDecimal getAmount() {
-		return amount;
+		return price;
 	}
-	public void setAmount(BigDecimal amount) {
-		this.amount = amount;
+	public void setAmount(BigDecimal price) {
+		this.price = price;
 	}
 	public Boolean getIsActive() {
 		return isActive;
@@ -43,23 +42,16 @@ public class MenuDto {
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
 	}
-	public List<SelectedFood> getFood() {
-		return food;
-	}
-	public void setFood(List<SelectedFood> food) {
-		this.food = food;
-	}
+	
 	public MenuDto() {}
 	
-	public MenuDto(Long id, String name, String description, BigDecimal amount, Boolean isActive,
-			List<SelectedFood> food) {
+	public MenuDto(Long id, String name, String description, BigDecimal price, Boolean isActive) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.description = description;
-		this.amount = amount;
+		this.price = price;
 		this.isActive = isActive;
-		this.food = food;
 	}
 	
 	

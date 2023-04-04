@@ -4,6 +4,7 @@ public class SelectedFoodDto {
 	private Long id;
 	private Long quantity;
 	private MenuDto menu;
+	private Long menuId;
 	private OrderDto order;
 	public Long getId() {
 		return id;
@@ -46,6 +47,12 @@ public class SelectedFoodDto {
 		this.quantity = quantity;
 		this.menu = menu;
 		this.order = order;
+	}
+	public Long getMenuId() {
+		return menuId;
+	}
+	public void setMenuId(Long menuId) {
+		this.menuId = menuId;
 	}
 	
 	

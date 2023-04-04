@@ -14,11 +14,14 @@ public class PaymentMode {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "ID", unique = true, nullable = false)
+	@Column(name = "ID")
 	private Long id;
 
-	@Column(name = "MODE", length = 20)
-	private String mode;
+	@Column(name = "NAME", length = 20)
+	private String name;
+	
+	@Column(name = "IS_ACTIVE")
+	private Boolean isActive;
 
 
 }

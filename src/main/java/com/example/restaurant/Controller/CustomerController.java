@@ -3,6 +3,7 @@ package com.example.restaurant.Controller;
 
 import java.util.List;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,12 +15,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.restaurant.dto.CustomerDto;
+import com.example.restaurant.dto.LoginDto;
 import com.example.restaurant.dto.MenuDto;
-
+import com.example.restaurant.exception.UserNotFoundException;
 import com.example.restaurant.model.Customer;
-import com.example.restaurant.service.serviceImpl.CustomerServiceImpl;
+import com.example.restaurant.service.impl.CustomerServiceImpl;
 
 import jakarta.servlet.http.HttpSession;
+
 
 @RestController
 public class CustomerController {
@@ -35,21 +38,25 @@ public class CustomerController {
 		}
 		
 		@PostMapping("/login")
-		public ResponseEntity<String> toLogin(@RequestParam("email") String email,
-                @RequestParam("password") String password,
-                HttpSession session){
-			Customer customer = customerService.authenticateCustomer(email, password);
-			if (customer != null) {
-	            session.setAttribute("customer", customer);
+		public ResponseEntity<String> toLogin(@RequestBody LoginDto loginDto,
+                HttpSession session) throws UserNotFoundException{
+			
+			try {
+				 Customer customer = customerService.authenticateCustomer(loginDto);
+				session.setAttribute("customer", customer);
+				 return ResponseEntity.ok("Login successful");
+			} 
+			catch (UserNotFoundException exception) {
+				// TODO Auto-generated catch block
+				throw exception;
+			}
+		}
+	            
 	           //HttpHeaders headers = new HttpHeaders();
 	            //headers.setLocation(URI.create("/menu"));
-	            return ResponseEntity.ok("Login successful");
-	            //return new ResponseEntity<>(headers, HttpStatus.FOUND);
-	        } 
-			else {
-	            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
-	        }
-		}
+	           
+	          //return new ResponseEntity<>(headers, HttpStatus.FOUND);
+			
 		
 		@GetMapping("/menu")
 		public ResponseEntity<List<MenuDto>> toGetMenu(HttpSession session){
@@ -63,9 +70,9 @@ public class CustomerController {
 	    }
 		
 		@PostMapping("/foodorder")
-		public ResponseEntity<String> toSelectFood(@RequestParam("id")Long id){
-			MenuDto menudto = new MenuDto();
-			customerService.selectTheFoodItem(id);
+		public ResponseEntity<String> toSelectFood(@RequestParam("id")Long id,@RequestParam("quantity")Long quantity){
+			//MenuDto menudto = new MenuDto();
+			customerService.selectTheFoodItem(id,quantity);
 			return ResponseEntity.ok("food selected");
 			
 		}
@@ -76,4 +83,7 @@ public class CustomerController {
 			return ResponseEntity.ok("Order Deleted");
 			
 		}
+		
+		//Reset password
+		
 }

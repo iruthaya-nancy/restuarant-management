@@ -10,4 +10,6 @@ import com.example.restaurant.model.Menu;
 @Repository
 public interface MenuRepository extends JpaRepository<Menu,Long> {
 	List<Menu> findByIdIn(List<Long> menuItemIds);
+
+	List<Menu> findByIdInAndIsActiveIsTrue(List<Long> id);
 }

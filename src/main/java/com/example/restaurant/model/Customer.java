@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.annotation.CreatedDate;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -14,6 +13,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
@@ -28,7 +28,7 @@ import jakarta.validation.constraints.Size;
 @Table(name = "CUSTOMER")
 public class Customer {
 	@Id
-	@Column(name = "ID",unique = true,nullable = false)
+	@Column(name = "ID")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
@@ -38,7 +38,7 @@ public class Customer {
 	@Column(name = "LAST_NAME",length = 20,nullable = false)
 	private String  lastName;
 	
-	@Column(name= "PASSWORD",length = 60, nullable = false)
+	@Column(name= "PASSWORD", nullable = false)
 	private String password;
 	
 	@Column(name = "EMAIL",unique = true,nullable = false )
@@ -49,46 +49,52 @@ public class Customer {
 	@Size(max = 10, message = "Phone number must be at most {max} characters long")
 	private String phoneNumber;
 	
-	//@Column(name = "DOOR_NO",length = 20,unique= true,nullable = false)
-	//private String doorNo;
+	 @Column(name = "reset_password_token",length = 30)
+	 private String resetPasswordToken;
 	
-	//@Column(name = "STREET_NAME",length = 50,nullable = false)
-	//private String street;
+	@Column(name = "DOOR_NO",length = 20,unique= true,nullable = false)
+	private String doorNo;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "customer")
-	private List<Area> address;
+	@Column(name = "STREET_NAME",length = 50,nullable = false)
+	private String street;
+	
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "AREA_ID")
+	private Area area;
 	
 	//@OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
     //private District district;
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "customer")
-	private List<District> district ;
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "DISTRICT_ID")
+	private District district ;
 	
 	
 	//@OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
     //private State state;
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "customer")
-	private List<State> state;
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "STATE_ID")
+	private State state;
 	
 		
-	@OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
-    private Order order;
-	
-		
+//	@OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
+//    private Order order;
+//	
+//		
 	//@CreationTimestamp
 	//@Temporal(TemporalType.DATE)
 	//@Column(name = "CREATED_AT")
 	//private Date createDate;
 	//@CreationTimestamp
-	@CreatedDate
-	 @Column(name ="CREATED_AT")
-	 @Temporal(TemporalType.DATE)
-	 private Date createDate;
+	 @CreationTimestamp
+	 @Column(name ="CREATED_AT", updatable = false)
+	 @Temporal(TemporalType.TIMESTAMP)
+	 private Date createdAt;
 	 
 	
 	@UpdateTimestamp
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "MODIFIED_AT")
-	private Date modifyDate;
+	private Date modifiedAt;
 
 	public Long getId() {
 		return id;
@@ -137,8 +143,10 @@ public class Customer {
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
+	
+	
 
-	/*public String getDoorNo() {
+	public String getDoorNo() {
 		return doorNo;
 	}
 
@@ -152,9 +160,17 @@ public class Customer {
 
 	public void setStreet(String street) {
 		this.street = street;
-	}*/
+	}
 
-	public List<Area> getAddress() {
+	public String getResetPasswordToken() {
+		return resetPasswordToken;
+	}
+
+	public void setResetPasswordToken(String resetPasswordToken) {
+		this.resetPasswordToken = resetPasswordToken;
+	}
+
+	/*public List<Area> getAddress() {
 		return address;
 	}
 
@@ -176,16 +192,41 @@ public class Customer {
 
 	public void setState(List<State> state) {
 		this.state = state;
-	}
-
-	public Order getOrder() {
-		return order;
-	}
-
-	public void setOrder(Order order) {
-		this.order = order;
-	}
+	}*/
 	
+
+//	public Order getOrder() {
+//		return order;
+//	}
+
+	public Area getArea() {
+		return area;
+	}
+
+	public void setArea(Area area) {
+		this.area = area;
+	}
+
+	public District getDistrict() {
+		return district;
+	}
+
+	public void setDistrict(District district) {
+		this.district = district;
+	}
+
+	public State getState() {
+		return state;
+	}
+
+	public void setState(State state) {
+		this.state = state;
+	}
+//
+//	public void setOrder(Order order) {
+//		this.order = order;
+//	}
+//	
 	public Customer(Long id) {
 		this.id = id;
 	}

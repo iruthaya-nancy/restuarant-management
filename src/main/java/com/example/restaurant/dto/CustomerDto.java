@@ -9,11 +9,11 @@ public class CustomerDto {
 	 private String password;
 	 private String email;
 	 private String phoneNumber;
-	 //private String doorNo;
-	 //private String street;
-	 private List<AreaDto> address;
-	 private List<DistrictDto> district;
-	 private List<StateDto> state;
+	 private String doorNo;
+	 private String street;
+	 private AreaDto area;
+	 private DistrictDto district;
+	 private StateDto state;
 	 
 	public Long getId() {
 		return id;
@@ -62,13 +62,13 @@ public class CustomerDto {
 	}
 	public void setStreet(String street) {
 		this.street = street;
-	}*/
+	}
 	
 	public List<AreaDto> getAddress() {
-		return address;
+		return area;
 	}
 	public void setAddress(List<AreaDto> address) {
-		this.address = address;
+		this.area = address;
 	}
 	public List<DistrictDto> getDistrict() {
 		return district;
@@ -85,13 +85,13 @@ public class CustomerDto {
 	
 	
 	public void addAddressDTO(AreaDto addressDTO) {
-        this.address.add(addressDTO);
+        this.area.add(addressDTO);
     }
 	
 	public CustomerDto() {}
 	public CustomerDto(Long id, String firstName, String lastName, String password, String email,
 			String phoneNumber){/* {, String doorNo, String street) {/*, List<AddressDto> address, DistrictDto district,
-			StateDto state) {*/
+			StateDto state) {
 		super();
 		this.id = id;
 		this.firstName = firstName;
@@ -105,6 +105,40 @@ public class CustomerDto {
 		//this.district = district;
 		//this.state = state;
 	}
+	*/
+	
+	
+	public AreaDto getArea() {
+		return area;
+	}
+	public String getDoorNo() {
+		return doorNo;
+	}
+	public void setDoorNo(String doorNo) {
+		this.doorNo = doorNo;
+	}
+	public String getStreet() {
+		return street;
+	}
+	public void setStreet(String street) {
+		this.street = street;
+	}
+	public void setArea(AreaDto area) {
+		this.area = area;
+	}
+	public DistrictDto getDistrict() {
+		return district;
+	}
+	public void setDistrict(DistrictDto district) {
+		this.district = district;
+	}
+	public StateDto getState() {
+		return state;
+	}
+	public void setState(StateDto state) {
+		this.state = state;
+	}
+	
 	
 	
 	 

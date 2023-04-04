@@ -1,4 +1,4 @@
-package com.example.restaurant.service.serviceImpl;
+package com.example.restaurant.service.impl;
 
 
 
