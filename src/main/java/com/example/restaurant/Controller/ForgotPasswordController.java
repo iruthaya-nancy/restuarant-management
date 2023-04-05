@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,19 +22,20 @@ import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
+@RequestMapping("/password")
 public class ForgotPasswordController {
 
 
 	@Autowired
 	private CustomerServiceImpl customerService;
 
-	@GetMapping("/forgot_password")
+	@GetMapping("/forgot")
 	public String showForgotPasswordForm() {
 		return "forgot_password_form";
 
 	}
 
-	@PostMapping("/forgot_password")
+	@PostMapping("/forgot")
 	public String processForgotPassword(Model model, HttpServletRequest request) {
 		ForgetPasswordServiceImpl passwordService= new ForgetPasswordServiceImpl();
 		String email = request.getParameter("email");
@@ -58,7 +60,7 @@ public class ForgotPasswordController {
 
 	}
 	
-	@GetMapping("/reset_password")
+	@GetMapping("/reset")
 	public String showResetPasswordForm(@RequestParam(value = "toker")String token,Model model) {
 		Customer customer = customerService.getByResetPasswordToken(token);
 	    model.addAttribute("token", token);
@@ -69,7 +71,7 @@ public class ForgotPasswordController {
 	    return "reset_passsword_form";// form name
 	}
 
-	@PostMapping("/reset_password")
+	@PostMapping("/reset")
 	public String processResetPassword(HttpServletRequest request, Model model) {
 		String token = request.getParameter("token");
 		String password = request.getParameter("password");

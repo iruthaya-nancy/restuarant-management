@@ -2,17 +2,25 @@ package com.example.restaurant.util;
 
 import java.io.Serializable;
 
-import com.fasterxml.jackson.databind.util.JSONPObject;
+import org.json.JSONObject;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 
+@JsonInclude(value = Include.NON_NULL)
 public class HttpStatusResponse implements Serializable {
 	
 	private static HttpStatusResponse httpResponse;
+	
+	private Integer totalRecords;
+
 	private Integer statusCode; 
 	private String description; 
 	private Object data;
 	private String customeCode;
-	private JSONPObject error;
+	private JSONObject error;
+	
 	public Integer getStatusCode() {
 		return statusCode;
 	}
@@ -59,16 +67,26 @@ public class HttpStatusResponse implements Serializable {
 		this.customeCode = customeCode;
 	}
 
-	
-
-	public JSONPObject getError() {
+	public JSONObject getError() {
 		return error;
 	}
 
 
 
-	public void setError(JSONPObject error) {
+	public void setError(JSONObject error) {
 		this.error = error;
+	}
+	
+
+
+	public Integer getTotalRecords() {
+		return totalRecords;
+	}
+
+
+
+	public void setTotalRecords(Integer totalRecords) {
+		this.totalRecords = totalRecords;
 	}
 
 
@@ -84,10 +102,51 @@ public class HttpStatusResponse implements Serializable {
 			httpResponse = new HttpStatusResponse(); 
 		} return httpResponse;
 	}
-	
-	public static Object setHttpResponse(int value, String responseMessage, Object data) {
-		// TODO Auto-generated method stub
-		return null;
+	//
+	public static HttpStatusResponse setHttpResponse(Integer totalRecords, Integer code,
+			String description, Object data) {
+		httpResponse = new HttpStatusResponse(); 
+		httpResponse.setTotalRecords(totalRecords);
+		httpResponse.setStatusCode(code);
+		httpResponse.setDescription(description); 
+		httpResponse.setData(data);
+		return httpResponse;
 	}
+	//code,description,data,custom code
+	public static HttpStatusResponse setHttpResponse(Integer code, String description,
+			Object data, String customCode) 
+	{
+		httpResponse = new HttpStatusResponse(); 
+		httpResponse.setTotalRecords(null); 
+		httpResponse.setStatusCode(code); 
+		httpResponse.setDescription(description); 
+		httpResponse.setData(data); 
+		httpResponse.setCustomeCode(customCode); 
+		return httpResponse; 
+	}
+	
+	public static HttpStatusResponse setHttpErrorResponse(Integer code, String description,
+			JSONObject error) 
+	{ 
+		HttpStatusResponse httpResponse = new HttpStatusResponse();
+		httpResponse.setTotalRecords(null); 
+		httpResponse.setStatusCode(code); 
+		httpResponse.setDescription(description); 
+		httpResponse.setError(error);
+		return httpResponse; }
+
+
+
+	public static  HttpStatusResponse setHttpResponse(Integer code, String description, Object data) {
+		HttpStatusResponse httpResponse = new HttpStatusResponse();
+		httpResponse.setStatusCode(code);
+		httpResponse.setDescription(description); 
+		httpResponse.setData(data); 
+		
+		return httpResponse;
+	}
+	
+	
+    
 
 }
