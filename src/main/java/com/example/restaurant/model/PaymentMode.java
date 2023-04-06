@@ -12,6 +12,8 @@ import jakarta.persistence.Table;
 @Table(name = "PAYMENT_MODE")
 public class PaymentMode {
 
+	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
@@ -23,5 +25,8 @@ public class PaymentMode {
 	@Column(name = "IS_ACTIVE")
 	private Boolean isActive;
 
-
+	public PaymentMode(Long id) {
+		super();
+		this.id = id;
+	}
 }

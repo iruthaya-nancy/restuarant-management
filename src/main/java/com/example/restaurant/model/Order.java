@@ -96,6 +96,16 @@ public class Order {
 	public void setItems(List<SelectedFood> items) {
 		this.items = items;
 	}
+    
+	
+	
+	public Date getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
+	}
 
 	public Order() {}
 	public Order(Long id) {

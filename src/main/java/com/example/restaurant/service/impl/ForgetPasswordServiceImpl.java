@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 
+import com.example.restaurant.model.Customer;
 import com.example.restaurant.service.ForgetPasswordService;
 
 import jakarta.mail.MessagingException;
@@ -21,8 +22,9 @@ public class ForgetPasswordServiceImpl implements ForgetPasswordService{
 		
 	    MimeMessage message = mailSender.createMimeMessage();              
 	    MimeMessageHelper helper = new MimeMessageHelper(message);
+	  
 	     
-	    helper.setFrom("contact@shopme.com", "Shopme Support");
+	    helper.setFrom("iruthaya05@gmail.com", "password");
 	    helper.setTo(recipientEmail);
 	     
 	    String subject = "Here's the link to reset your password";

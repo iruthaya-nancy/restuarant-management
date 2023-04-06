@@ -80,8 +80,8 @@ public class Menu {
 		return price;
 	}
 
-	public void setAmount(BigDecimal amount) {
-		this.price = amount;
+	public void setAmount(BigDecimal price) {
+		this.price = price;
 	}
 
 	public Boolean getIsActive() {

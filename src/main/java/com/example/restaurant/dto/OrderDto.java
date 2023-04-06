@@ -1,11 +1,12 @@
 package com.example.restaurant.dto;
 
-
+import java.util.Date;
 
 public class OrderDto {
 	private Long id;
 	private Double totalAmount;
 	private Long customerId;
+	private Date orderDate;
 	
 	public Long getId() 
 	{
@@ -25,6 +26,13 @@ public class OrderDto {
 	}
 	public void setCustomerId(Long customer) {
 		this.customerId = customer;
+	}
+	
+	public Date getOrderDate() {
+		return orderDate;
+	}
+	public void setOrderDate(Date orderDate) {
+		this.orderDate = orderDate;
 	}
 	public OrderDto(Long id, Double totalAmount) {
 		super();

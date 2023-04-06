@@ -31,7 +31,7 @@ import jakarta.servlet.http.HttpSession;
 @RequestMapping("/customer")
 public class CustomerController {
 	@Autowired
-	public CustomerServiceImpl customerService;
+	private CustomerServiceImpl customerService;
 
 	@PostMapping("/signup")
 	public ResponseEntity<HttpStatusResponse> toCreateUser(@RequestBody CustomerDto customerDtoImpl) {
@@ -75,18 +75,18 @@ public class CustomerController {
 		}
 	}
 
-	@PostMapping("/foodorder")
-	public ResponseEntity<HttpStatusResponse> toSelectFood(@RequestParam("id") Long id,
-			@RequestParam("quantity") Long quantity) {
-		try {
-			customerService.selectTheFoodItem(id, quantity);
-			return ResponseUtils.prepareSuccessResponse("Login successful", null);
-		} catch (BusinessServiceException exception) {
-			return ResponseUtils.prepareNoRecordFoundResponse("The requested food is not available");
-		}
-	}
+//	@PostMapping("/foodorder")
+//	public ResponseEntity<HttpStatusResponse> toSelectFood(@RequestParam("id") Long id,
+//			@RequestParam("quantity") Long quantity) {
+//		try {
+//			customerService.selectTheFoodItem(id, quantity);
+//			return ResponseUtils.prepareSuccessResponse("Login successful", null);
+//		} catch (BusinessServiceException exception) {
+//			return ResponseUtils.prepareNoRecordFoundResponse("The requested food is not available");
+//		}
+//	}
 
-	@DeleteMapping("/deleteorder")
+	@DeleteMapping("/order")
 	public ResponseEntity<HttpStatusResponse> toDeleteOrder(@RequestParam("id") Long id) {
 		try {
 		customerService.toDeleteOrder(id);

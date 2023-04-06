@@ -143,6 +143,7 @@ public class CustomerServiceImpl implements CustomerService {
 			dto.setId(item.getId());
 			dto.setName(item.getName());
 			dto.setDescription(item.getDescription());
+			dto.setIsActive(item.getIsActive());
 			dto.setAmount(item.getAmount());
 			menu.add(dto);
 		}
@@ -168,7 +169,12 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	public void toDeleteOrder(Long id) throws BusinessServiceException{
-		orderRepo.deleteById(id);
+		if(orderRepo.existsById(id)){
+				orderRepo.deleteById(id);
+		}
+		else {
+			throw new BusinessServiceException("Id does not exist");
+		}
 	}
   
 	// password resetting

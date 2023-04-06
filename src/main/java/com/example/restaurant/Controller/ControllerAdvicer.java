@@ -27,11 +27,7 @@ import com.example.restaurant.util.ResponseUtils;
 @ControllerAdvice
 public class ControllerAdvicer extends ResponseEntityExceptionHandler {
 
-//	@ExceptionHandler(BusinessServiceException.class)
-//	public ResponseEntity<HttpStatusResponse> businessServiceException(BusinessServiceException ex) {
-//		return ResponseUtils.prepareInternalServerErrorResponse("Internal server error");
-//	}
-	
+		
 	@ExceptionHandler(InternalServerException.class)
 	public ResponseEntity<HttpStatusResponse> InternalServiceException(InternalServerException ex) {
 		return ResponseUtils.prepareInternalServerErrorResponse("Internal server error");

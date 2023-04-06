@@ -8,12 +8,14 @@ import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,12 +36,12 @@ import com.example.restaurant.util.ResponseUtils;
 public class MenuController {
 
 	@Autowired
-	public MenuServiceImpl menuService;
+	private MenuServiceImpl menuService;
 	
 	@Autowired
-	public ModelMapper modelMapper;
+	private ModelMapper modelMapper;
 	
-	@PostMapping("/addmenu")
+	@PostMapping
 	public ResponseEntity<HttpStatusResponse> toInsertFoodToMenu(@RequestBody MenuDto menuDto)
 	{
 		try {
@@ -51,7 +53,7 @@ public class MenuController {
 		}
 	}
 	
-	@DeleteMapping("/deletmenu")
+	@DeleteMapping
 	public ResponseEntity<HttpStatusResponse> toDeleteFoodFromMenu(@RequestParam("id") Long id){
 		try {
 		      menuService.toDeleteFoodFromMenu(id);
@@ -63,19 +65,19 @@ public class MenuController {
 	  
 	}
 	
-	@PutMapping("/updatecost")
-	public ResponseEntity<HttpStatusResponse> toUpdateTheFood(@RequestParam("id") Long id,@RequestParam("price") BigDecimal price){
+	@PatchMapping("{id}")
+	public ResponseEntity<HttpStatusResponse> toUpdateTheFood(@PathVariable("id") Long id,@RequestParam("price") BigDecimal price){
 	 try {
 		menuService.toUpdateTheFood(id,price);
-		return ResponseUtils.prepareAcceptedResponse("Deleted SuccessFully",null);
+		return ResponseUtils.prepareAcceptedResponse("updated SuccessFully",null);
 	 }
 	 catch(BusinessServiceException exception) {
 		 return ResponseUtils.prepareNoRecordFoundResponse("Id not found");
 	 }
 	}
 	
-	@GetMapping("/viewmenu")
-	public ResponseEntity<HttpStatusResponse> toViewTheMenu(@RequestParam(value = "page")int page,@RequestParam(value = "size") int size){
+	@GetMapping
+	public ResponseEntity<HttpStatusResponse> toViewTheMenu(@RequestParam(value = "page",defaultValue = "0")int page,@RequestParam(value = "size",defaultValue = "2") int size){
 		try {
 			List<Menu> menu = menuService.toViewTheMenu(page,size);
 			List<MenuDto> menudto =  menu.stream()
@@ -102,9 +104,9 @@ public class MenuController {
 		//menuService.toGetTheFoodCount(fromDate,toDate,name);// do i have to pass the name
 	//}
 	
-	@PostMapping("/soldFood")
-	public ResponseEntity<HttpStatusResponse> toGetFoodSoldData(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date fromDate,
-			@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date toDate) {
+	@PostMapping("/FoodSold/{fromDate}/{toDate}")
+	public ResponseEntity<HttpStatusResponse> toGetFoodSoldData(@PathVariable("fromDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fromDate,
+			@PathVariable("toDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date toDate) {
 		try {
 			List<FoodSoldDto> foodSold = menuService.toGetTheFoodSold(fromDate, toDate);
 			return ResponseUtils.prepareSuccessResponse("The food sold is", foodSold);

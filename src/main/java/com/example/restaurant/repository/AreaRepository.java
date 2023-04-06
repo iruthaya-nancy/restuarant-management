@@ -9,7 +9,7 @@ import com.example.restaurant.model.Area;
 
 
 @Repository
-public interface AddressRepository extends JpaRepository<Area,Long> {
+public interface AreaRepository extends JpaRepository<Area,Long> {
 
 	Optional<Area> findByPincode(Long pincode);
 

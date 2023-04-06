@@ -3,9 +3,7 @@ package com.example.restaurant.service.impl;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,13 +24,17 @@ public class MenuServiceImpl implements MenuService{
 	@Autowired
 	private MenuRepository menuRepo;
 	
-	@Autowired
-	private ModelMapper modelMapper;
-	
+		
 	@Transactional
 	public void toInsertFoodToMenu(MenuDto menudto) throws ContraintViolationException{
 	 if(menudto != null) {
-		Menu menu = this.modelMapper.map(menudto, Menu.class);
+		//Menu menu = this.modelMapper.map(menudto, Menu.class);
+		Menu menu = new Menu();
+		menu.setId(menudto.getId());
+		menu.setName(menudto.getName());
+		menu.setDescription(menudto.getDescription());
+		menu.setAmount(menudto.getAmount());
+		menu.setIsActive(menudto.getIsActive());
 		menuRepo.save(menu);
 	 }
 	 else {
@@ -44,13 +46,13 @@ public class MenuServiceImpl implements MenuService{
 	@Transactional
 	public void toDeleteFoodFromMenu(Long id) throws BusinessServiceException
 	{
-		if(menuRepo.existsById(id))
-		{
+		if(menuRepo.existsById(id)){
 			menuRepo.deleteById(id);
-		}
-		else {
-			throw new BusinessServiceException("Please enter the proper data");
-		}
+	}
+	else {
+		throw new BusinessServiceException("Id does not exists");
+	}	
+		
 	}
 	
 	@Transactional 
