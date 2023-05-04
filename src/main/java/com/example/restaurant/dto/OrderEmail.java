@@ -2,7 +2,8 @@ package com.example.restaurant.dto;
 
 import java.util.Date;
 import java.util.List;
-
+import java.util.Objects;
+import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -120,91 +121,11 @@ public class OrderEmail {
 		this.quantity = quantity;
 	}
 	
-	@Autowired
-	private static CustomerRepository customerRepo;
-	
-		
-	@Autowired
-	private static OrderRepository orderRepo;
-	
-	@Autowired
-	private static SelectedFoodRepository selectedFoodRepo;
-	
-	@Autowired
-	private static ModelMapper modelmapper;
 	
 	
-	public static OrderEmail toSendMail(Long id) {
-		OrderEmail orderEmail = new OrderEmail();
-		Customer customer = customerRepo.findById(id).get();
-		CustomerDto cdto = convertCustomerToDto(customer);
-		Area area = cdto.getAreadto();
-		AreaDto adto = convertAreaToDto(area);
-		District districtEntity = cdto.getDistrictDto();
-		State stateEntity = cdto.getStatedto();
-		orderEmail.setFirstName(cdto.getFirstName());
-		orderEmail.setLastName(cdto.getLastName());
-		orderEmail.setDoorNo(cdto.getDoorNo());
-		orderEmail.setStreetName(cdto.getStreet());
-		orderEmail.setArea(adto.getName());
-		orderEmail.setPincode(adto.getPincode());
-		orderEmail.setDistrict(toGetDistrict(districtEntity));
-		orderEmail.setState(toGetState(stateEntity));
-		Order order = orderRepo.findById(cdto.getId()).get();
-		OrderDto odto = toConvertOrderToDto(order);
-		orderEmail.setOrderdate(odto.getOrderDate());
-		orderEmail.setTotal(odto.getTotalAmount());
-		orderEmail.setOrderId(odto.getId());
-		SelectedFood selectedFood = selectedFoodRepo.findById(odto.getId()).get();
-		orderEmail.setQuantity(toGetQuantity(selectedFood));
-		return orderEmail;
-		
-	}
+	
+	
 
-	
-	private static CustomerDto convertCustomerToDto(Customer customer) {
-		CustomerDto customerdto = modelmapper.map(customer,CustomerDto.class);
-		customerdto.setFirstName(customer.getFirstName());
-		customerdto.setLastName(customer.getLastName());
-		customerdto.setDoorNo(customer.getDoorNo());
-		customerdto.setStreet(customer.getStreet());
-		customerdto.setAreadto(customer.getArea());
-		customerdto.setDistrictdto(customer.getDistrict());
-		customerdto.setStatedto(customer.getState());
-		return customerdto;
-	}
-	//to get area
-	private static AreaDto convertAreaToDto(Area area) {
-		AreaDto areadto = modelmapper.map(area, AreaDto.class);
-		//areadto.setId(area.getId());
-		areadto.setName(area.getName());
-		areadto.setPincode(area.getId());
-		//areadto.setIsActive(area.getIsActive());
-		return areadto;
-		
-	}
-	
-	private static String toGetDistrict(District district) {
-		  return  district.getName();
-	}
-	
-	private static String toGetState(State state) {
-		return  state.getName();
-	
-	}
-	
-	private static OrderDto toConvertOrderToDto(Order order) {
-		OrderDto orderDto = modelmapper.map(order,OrderDto.class);
-		orderDto.setId(order.getId());
-		orderDto.setTotalAmount(order.getTotalAmount());
-		orderDto.setOrderDate(order.getCreatedAt());
-	    return orderDto;	
-	}
-	
-	//to get the quantity name
-	private static Long toGetQuantity(SelectedFood selectedFoods) {
-		return  selectedFoods.getQuantity();	
-	}
 	
 	
 

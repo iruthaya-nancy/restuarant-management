@@ -168,6 +168,42 @@ public class CustomerDto {
 		this.state = state;
 		
 	}
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("CustomerDto [id=");
+		builder.append(id);
+		builder.append(", firstName=");
+		builder.append(firstName);
+		builder.append(", lastName=");
+		builder.append(lastName);
+		builder.append(", password=");
+		builder.append(password);
+		builder.append(", email=");
+		builder.append(email);
+		builder.append(", phoneNumber=");
+		builder.append(phoneNumber);
+		builder.append(", doorNo=");
+		builder.append(doorNo);
+		builder.append(", street=");
+		builder.append(street);
+		builder.append(", areadto=");
+		builder.append(areadto);
+		builder.append(", districtdto=");
+		builder.append(districtdto);
+		builder.append(", statedto=");
+		builder.append(statedto);
+		builder.append(", area=");
+		builder.append(area);
+		builder.append(", district=");
+		builder.append(district);
+		builder.append(", state=");
+		builder.append(state);
+		builder.append("]");
+		return builder.toString();
+	}
+	
+	
 	
 	
 	

@@ -1,8 +1,12 @@
 package com.example.restaurant.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +17,11 @@ import com.example.restaurant.dto.CustomerDto;
 
 import com.example.restaurant.dto.LoginDto;
 import com.example.restaurant.dto.MenuDto;
+import com.example.restaurant.dto.SelectedFoodDto;
 import com.example.restaurant.exception.BusinessServiceException;
 import com.example.restaurant.exception.ContraintViolationException;
 import com.example.restaurant.exception.InternalServerException;
-import com.example.restaurant.exception.UserNotFoundException;
+import com.example.restaurant.exception.NotFoundException;
 import com.example.restaurant.model.Area;
 import com.example.restaurant.model.Customer;
 import com.example.restaurant.model.District;
@@ -33,11 +38,15 @@ import com.example.restaurant.repository.OrderRepository;
 import com.example.restaurant.repository.SelectedFoodRepository;
 
 import com.example.restaurant.service.CustomerService;
+import com.example.restaurant.service.EmailService;
 
 import jakarta.transaction.Transactional;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
+	
+	private Object passwordResetTokenExpiration;
+	
 	@Autowired
 	private CustomerRepository customerRepo;
 
@@ -55,15 +64,16 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Autowired
 	private SelectedFoodRepository selectedFoodRepo;
+	
+
 
 	@Transactional // signup
-	public void insertCustomer(CustomerDto customerdto) throws ContraintViolationException
+	public Long insertCustomer(CustomerDto customerdto) throws ContraintViolationException
 	{
-		
+		Customer customer;
 		if(customerdto!=null)
 		{
-			Customer customer = new Customer();
-			customer.setId(customerdto.getId());
+		    customer = new Customer();
 			customer.setFirstName(customerdto.getFirstName());
 			customer.setLastName(customerdto.getLastName());
 			String pass = customerdto.getPassword();
@@ -118,25 +128,27 @@ public class CustomerServiceImpl implements CustomerService {
 //				stateRepo.save(state);
 //			}
 //			customer.setState(states);
+			//return customer.getId();
 		} 
 		else {
 			throw new ContraintViolationException("Please check the data");
 		}
+		return customer.getId();
 	}
 
 	// login
-	public Customer authenticateCustomer(LoginDto loginDto) throws UserNotFoundException {
+	public Long authenticateCustomer(LoginDto loginDto) throws NotFoundException {
 		Customer customer = customerRepo.findByEmail(loginDto.getEmail());
 		if (customer != null && passwordEncoder.matches(loginDto.getPassword(), customer.getPassword())) {
-			return customer;
+			return customer.getId();
 		} else {
-			throw new UserNotFoundException("Please Check your username or Password");
+			throw new NotFoundException("Please Check your username or Password");
 		}
 	}
 
 	// menu items
 	public List<MenuDto> getMenu() throws InternalServerException{
-		List<Menu> menuItems = menuRepo.findAll();
+		List<Menu> menuItems = menuRepo.findByIsActiveIsTrue();
 		List<MenuDto> menu = new ArrayList<>();
 		for (Menu item : menuItems) {
 			MenuDto dto = new MenuDto();
@@ -149,6 +161,42 @@ public class CustomerServiceImpl implements CustomerService {
 		}
 
 		return menu;
+	}
+	
+	// to get the menu of the particular id we need order id from which we can get the food id from which 
+	public List<MenuDto>  toGetOrderedFood(Long id) throws BusinessServiceException {// orderId
+		   List<Menu> menus = selectedFoodRepo.findByOrderId(id).stream().map(SelectedFood::getMenu).filter(Objects::nonNull)
+					.collect(Collectors.toList());
+		   if(menus.isEmpty()) {
+				throw new BusinessServiceException("Selected menu id not available");
+			}
+		   List<MenuDto> menu = new ArrayList<>();
+		   for(Menu m:menus) {
+			   MenuDto dto = new MenuDto();
+			   dto.setId(m.getId());
+			   dto.setName(m.getName());
+			   dto.setDescription(m.getDescription());
+			   dto.setAmount(m.getAmount());
+			   dto.setIsActive(m.getIsActive());
+			   menu.add(dto);
+		   }
+		   return menu;
+		
+	}
+	
+	public List<MenuDto> toGetMenuById(List<Long> ids) throws BusinessServiceException{
+		List<MenuDto> m = new ArrayList<>();
+		
+		for(Long id:ids) {
+			Menu menu = menuRepo.findById(id).get();
+			MenuDto menuDto = new MenuDto();
+			menuDto.setId(menu.getId());
+			menuDto.setName(menu.getName());
+			menuDto.setDescription(menu.getDescription());
+			menuDto.setAmount(menu.getAmount());
+			m.add(menuDto);
+		}
+		return m;
 	}
 
 	// add items to selected food to view another api
@@ -178,13 +226,13 @@ public class CustomerServiceImpl implements CustomerService {
 	}
   
 	// password resetting
-	public void updateResetPasswordToken(String token, String email) throws UserNotFoundException {
+	public void updateResetPasswordToken(String token, String email) throws NotFoundException {
 		Customer customer = customerRepo.findByEmail(email);
 		if (customer != null) {
 			customer.setResetPasswordToken(token);
 			customerRepo.save(customer);
 		} else {
-			throw new UserNotFoundException("Could not find any customer with the email " + email);
+			throw new NotFoundException("Could not find any customer with the email " + email);
 		}
 	}
 
@@ -199,5 +247,24 @@ public class CustomerServiceImpl implements CustomerService {
 		customer.setResetPasswordToken(null);
 		customerRepo.save(customer);
 	}
+	
+	public void createPasswordResetTokenForUser(String token,String email) {
+//		String token = null;
+        Customer user = customerRepo.findByEmail(email);
+        if (user != null) {
+////            String token = user.createPasswordResetTokenForUser();
+////            //customerRepo.save(user);
+////            emailService.sendPasswordResetToken(token);
+//        	token = UUID.randomUUID().toString();
+            user.setResetPasswordToken(token);
+            passwordResetTokenExpiration = LocalDateTime.now().plusHours(24);
+            customerRepo.save(user);
+        }
+		//return token;
+    }
+
+	
+	
+	
 
 }

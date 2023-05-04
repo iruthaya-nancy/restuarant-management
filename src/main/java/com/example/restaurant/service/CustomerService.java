@@ -9,13 +9,16 @@ import com.example.restaurant.dto.SelectedFoodDto;
 import com.example.restaurant.exception.BusinessServiceException;
 import com.example.restaurant.exception.ContraintViolationException;
 import com.example.restaurant.exception.InternalServerException;
-import com.example.restaurant.exception.UserNotFoundException;
+import com.example.restaurant.exception.NotFoundException;
 import com.example.restaurant.model.Customer;
 
 public interface CustomerService {
-	public void insertCustomer(CustomerDto customer) throws ContraintViolationException;
-	public Customer authenticateCustomer(LoginDto loginDto) throws UserNotFoundException;
+	public Long insertCustomer(CustomerDto customer) throws ContraintViolationException;
+	public Long authenticateCustomer(LoginDto loginDto) throws NotFoundException;
 	public List<MenuDto> getMenu() throws InternalServerException;
 	public void selectTheFoodItem(Long id,Long quantity) throws BusinessServiceException;
 	public void toDeleteOrder(Long id)throws BusinessServiceException;
+	public void createPasswordResetTokenForUser(String token,String email);
+	public List<MenuDto> toGetOrderedFood(Long id)throws BusinessServiceException;
+	public List<MenuDto> toGetMenuById(List<Long> id) throws BusinessServiceException;
 }

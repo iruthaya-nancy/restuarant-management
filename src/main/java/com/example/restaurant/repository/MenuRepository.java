@@ -14,6 +14,8 @@ import com.example.restaurant.model.Menu;
 @Repository
 public interface MenuRepository extends JpaRepository<Menu, Long> {
 	List<Menu> findByIdIn(List<Long> menuItemIds);
+	 
+	List<Menu> findByIsActiveIsTrue();
 
 	List<Menu> findByIdInAndIsActiveIsTrue(List<Long> id);
 
@@ -21,3 +23,4 @@ public interface MenuRepository extends JpaRepository<Menu, Long> {
 	//@Query(value = "select name,count(menu_id) from selected_food left join menu on menu.id = selected_food.menu_id where date(selected_food.created_at) between :fromDate and :toDate group by(menu_id);" ,nativeQuery = true)
 	List<FoodSoldDto> findFoodSold(Date fromDate, Date toDate);
 }
+ 

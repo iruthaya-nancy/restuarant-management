@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.restaurant.exception.UserNotFoundException;
+import com.example.restaurant.exception.NotFoundException;
 import com.example.restaurant.model.Customer;
 import com.example.restaurant.service.impl.CustomerServiceImpl;
 import com.example.restaurant.service.impl.ForgetPasswordServiceImpl;
@@ -47,7 +47,7 @@ public class ForgotPasswordController {
 			passwordService.sendEmail(email, resetPasswordLink);
 			model.addAttribute("message", "We have sent a reset password link to your email. Please check.");
 
-		} catch (UserNotFoundException ex) {
+		} catch (NotFoundException ex) {
 			model.addAttribute("error", ex.getMessage());
 		} catch (UnsupportedEncodingException | MessagingException e) {
 			model.addAttribute("error", "Error while sending email");
@@ -61,7 +61,7 @@ public class ForgotPasswordController {
 	}
 	
 	@GetMapping("/reset")
-	public String showResetPasswordForm(@RequestParam(value = "toker")String token,Model model) {
+	public String showResetPasswordForm(@RequestParam(value = "token")String token,Model model) {
 		Customer customer = customerService.getByResetPasswordToken(token);
 	    model.addAttribute("token", token);
 	    if (customer == null) {

@@ -71,12 +71,12 @@ public class MenuServiceImpl implements MenuService{
 	//conversion to dto is done in controller
 	//List<MenuDto> menu = (List<MenuDto>) this.modelMapper.map(menuDto, Menu.class);
 	// TODO Auto-generated method stub
-	public List<Menu> toViewTheMenu(int page,int size) throws BusinessServiceException
+	public List<Menu> toViewTheMenu() throws BusinessServiceException
 	{
-		Pageable paging = PageRequest.of(page, size);
-		Page<Menu> menuItem = menuRepo.findAll(paging);
+		
+		List<Menu> menuItem = menuRepo.findAll();
 		if(menuItem!=null) {
-			return menuItem.getContent();
+			return menuItem;
 		}
 		else {
 			throw new BusinessServiceException("Please enter the proper data");

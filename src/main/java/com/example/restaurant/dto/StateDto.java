@@ -37,6 +37,8 @@ public class StateDto {
 	public void setCustomer(CustomerDtoImpl customer) {
 		this.customer = customer;
 	}*/
+	
+	public StateDto() {}
 	public StateDto(Long id, String name, Boolean isActive) {
 		super();
 		this.id = id;

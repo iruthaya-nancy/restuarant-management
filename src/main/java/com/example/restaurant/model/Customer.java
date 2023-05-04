@@ -1,7 +1,9 @@
 package com.example.restaurant.model;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -95,6 +97,10 @@ public class Customer {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "MODIFIED_AT")
 	private Date modifiedAt;
+
+	
+
+
 
 	public Long getId() {
 		return id;
@@ -264,5 +270,14 @@ public class Customer {
         }
         return add1;
     }*/
+	
+//	public String createPasswordResetTokenForUser() {
+//        String token = UUID.randomUUID().toString();
+//        resetPasswordToken = token;
+//        this.passwordResetTokenExpiration = LocalDateTime.now().plusHours(24);
+//        return resetPasswordToken;
+//    }
+	
+	
 	}
 

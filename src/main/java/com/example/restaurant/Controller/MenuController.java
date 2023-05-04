@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -33,6 +34,7 @@ import com.example.restaurant.util.ResponseUtils;
 //admin to access menu
 @RequestMapping("/menu")
 @RestController
+@CrossOrigin("*")
 public class MenuController {
 
 	@Autowired
@@ -77,9 +79,9 @@ public class MenuController {
 	}
 	
 	@GetMapping
-	public ResponseEntity<HttpStatusResponse> toViewTheMenu(@RequestParam(value = "page",defaultValue = "0")int page,@RequestParam(value = "size",defaultValue = "2") int size){
+	public ResponseEntity<HttpStatusResponse> toViewTheMenu(){
 		try {
-			List<Menu> menu = menuService.toViewTheMenu(page,size);
+			List<Menu> menu = menuService.toViewTheMenu();
 			List<MenuDto> menudto =  menu.stream()
 										  .map(this::convertToDto)
 										  .collect(Collectors.toList());
@@ -104,7 +106,7 @@ public class MenuController {
 		//menuService.toGetTheFoodCount(fromDate,toDate,name);// do i have to pass the name
 	//}
 	
-	@PostMapping("/FoodSold/{fromDate}/{toDate}")
+	@GetMapping("/FoodSold/{fromDate}/{toDate}")
 	public ResponseEntity<HttpStatusResponse> toGetFoodSoldData(@PathVariable("fromDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fromDate,
 			@PathVariable("toDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date toDate) {
 		try {

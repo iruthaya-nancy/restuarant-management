@@ -5,6 +5,7 @@ import java.io.UnsupportedEncodingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.stereotype.Service;
 
 import com.example.restaurant.model.Customer;
 import com.example.restaurant.service.ForgetPasswordService;
@@ -12,7 +13,10 @@ import com.example.restaurant.service.ForgetPasswordService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 
+@Service
 public class ForgetPasswordServiceImpl implements ForgetPasswordService{
+	
+	
 	@Autowired
 	private JavaMailSender mailSender;
 	
