@@ -25,13 +25,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.restaurant.dto.FoodSoldDto;
 import com.example.restaurant.dto.MenuDto;
 import com.example.restaurant.exception.BusinessServiceException;
-import com.example.restaurant.exception.ContraintViolationException;
+import com.example.restaurant.exception.ConstraintViolationException;
+import com.example.restaurant.exception.NotFoundException;
 import com.example.restaurant.model.Menu;
 import com.example.restaurant.service.impl.MenuServiceImpl;
 import com.example.restaurant.util.HttpStatusResponse;
 import com.example.restaurant.util.ResponseUtils;
 
-//admin to access menu
 @RequestMapping("/menu")
 @RestController
 @CrossOrigin("*")
@@ -50,7 +50,7 @@ public class MenuController {
 			menuService.toInsertFoodToMenu(menuDto);
 			return ResponseUtils.prepareAcceptedResponse("Added Successfully", menuDto);
 		}
-		catch(ContraintViolationException exception) {
+		catch(ConstraintViolationException exception) {
 			return ResponseUtils.prepareUnProcessableEntityResponse("Failed to insert menu.Please enter the valid data");
 		}
 	}
@@ -68,7 +68,7 @@ public class MenuController {
 	}
 	
 	@PatchMapping("{id}")
-	public ResponseEntity<HttpStatusResponse> toUpdateTheFood(@PathVariable("id") Long id,@RequestParam("price") BigDecimal price){
+	public ResponseEntity<HttpStatusResponse> toUpdateTheFood(@PathVariable("id") Long id,@RequestParam(required = false) BigDecimal price){
 	 try {
 		menuService.toUpdateTheFood(id,price);
 		return ResponseUtils.prepareAcceptedResponse("updated SuccessFully",null);
@@ -76,6 +76,9 @@ public class MenuController {
 	 catch(BusinessServiceException exception) {
 		 return ResponseUtils.prepareNoRecordFoundResponse("Id not found");
 	 }
+	 catch(NotFoundException exception) {
+			return ResponseUtils.prepareNoRecordFoundResponse("requested menu not found");
+			}
 	}
 	
 	@GetMapping
@@ -101,12 +104,9 @@ public class MenuController {
 		return menudto;
 	}
 	
-	//@GetMapping("/")
-	//public List<FoodSoldDto> toGetCountOfFood(@RequestParam(value = "fromDate") Date fromDate,@RequestParam(value = "toDate")Date toDate){
-		//menuService.toGetTheFoodCount(fromDate,toDate,name);// do i have to pass the name
-	//}
 	
-	@GetMapping("/FoodSold/{fromDate}/{toDate}")
+	
+	@GetMapping("/foodSold/{fromDate}/{toDate}")
 	public ResponseEntity<HttpStatusResponse> toGetFoodSoldData(@PathVariable("fromDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fromDate,
 			@PathVariable("toDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date toDate) {
 		try {

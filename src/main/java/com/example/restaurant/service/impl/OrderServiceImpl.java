@@ -8,21 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import org.apache.el.parser.AstDotSuffix;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import com.example.restaurant.dto.OrderDto;
 import com.example.restaurant.dto.OrderEmail;
 import com.example.restaurant.dto.SelectedFoodDto;
 import com.example.restaurant.exception.BusinessServiceException;
@@ -46,7 +41,8 @@ import jakarta.activation.DataSource;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.mail.util.ByteArrayDataSource;
-
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -70,18 +66,9 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderMailService orderMail;
 
-	/* public Optional<Order> getOrderById(Long orderId) {
-	        return order.findById(orderId);
-	    }
-	*/
 	@Transactional
 	public Long createOrder(List<SelectedFoodDto> selectedFoods, Long customerId,Long paymentid) throws BusinessServiceException, UnsupportedEncodingException,MessagingException {
-//		Customer customer = new Customer();
-//		Order order = new Order();
-//		order.setId(orderDto.getId());
-//	    order.setCustomer(new Customer(customer.getId()));
-//	    order.setTotalAmount(orderDto.getTotalAmount());
-//	    orderRepo.save(order);
+
 		Long orderId = null;
 		try {
 		if(!CollectionUtils.isEmpty(selectedFoods)) {
@@ -110,13 +97,7 @@ public class OrderServiceImpl implements OrderService {
 				});
 				selectedFoodRepository.saveAll(sf);
 				sendOrderEmail(customerId,orderId,selectedFoods);
-//				try {
-//				     //sendOrderEmail(customerId);
-//			     }
-//				catch(MessagingException exception) {
-//					throw new BusinessServiceException("cannot mail");
-//				}
-//				}
+
 			}
 		}
 		}
@@ -137,61 +118,72 @@ public class OrderServiceImpl implements OrderService {
 				.filter(Objects::nonNull)
 				.collect(Collectors.toList());
 		List<Menu> menus = menuRepository.findByIdIn(ids);
-		
-//		SimpleMailMessage msg = new SimpleMailMessage();
+		List<Long> quantity = selectedFoods.stream().map(SelectedFoodDto::getQuantity)
+				.filter(Objects::nonNull).collect(Collectors.toList());
+		Order o = orderRepo.findById(email.getOrderId()).get();
 		
 		MimeMessage msg = mailSender.createMimeMessage();              
 	    MimeMessageHelper helper = new MimeMessageHelper(msg,true);
+	    
+	    Date orderDate = email.getOrderdate();
+	    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+	    String formattedDate = dateFormat.format(orderDate);
 		
 	    helper.setFrom("iruthaya05@gmail.com");
 	    helper.setTo(receiver);
-	    String subject = "Here's your Order";
+	    String subject = "Order"+email.getOrderId();
+	  
 	    
-	     
-	    String content = "Hello,"+"\n"
-	        	+ "Your Order is"+"\n"
-	            +"FirstName:"+email.getFirstName()+" "+email.getLastName()+"\n"
-	            +"Delivery Location"+"\n"
-	            +"DooorNumber:"+email.getDoorNo()+"\n"
-	            +"StreetName:"+email.getStreetName()+"\n"
-	            +"Area:"+email.getArea()+"\n"
-	            +"District:"+email.getDistrict()+"\n"
-	    		+"State:"+email.getState()+"\n"
-	    		+"Pincode:"+email.getPincode()+"\n"
-	    		+"Your ordernumber:"+email.getOrderId()+"\n"
-	    		+"Order placed on:"+email.getOrderdate();
+	    String content = "Hello "+email.getFirstName() + " " + email.getLastName()+"\n"
+	            + "Your Order Details:\n\n"
+	            + "--------------------------------------------------\n"
+	            + "| Delivery Address                               |\n"
+	            + "--------------------------------------------------\n"
+	            + "| Door Number:\t"	+"   "+ String.format("%-30s",email.getDoorNo())+"\n"
+	            + "| Street Name:\t" 	+"   "+ String.format("%-30s",email.getStreetName())+"\n"
+	            + "| Area:\t\t"         +"   "+ String.format("%-30s",email.getArea())+"\n"
+	            + "| District:\t"       +"   "+ String.format("%-30s",email.getDistrict())+"\n"
+	            + "| State:\t"          +"   "+ String.format("%-30s",email.getState())+"\n"
+	            + "| Pincode:\t"        +"   "+ String.format("%-30s",email.getPincode())+"\n"
+	            + "| Order Number:\t"   +"   "+ String.format("%-30s",email.getOrderId())+"\n"
+	            + "| Order Placed On:"  +"   "+ String.format("%-28s",formattedDate)+"\n"
+	            + "| Total Amount: "    +"   "+ String.format("%-30s","₹"+o.getTotalAmount())+"\n" 
+	            + "--------------------------------------------------\n"
+	            + "| Food Items and Quantity                       |\n"
+	            + "--------------------------------------------------\n";
+
+	      for(int i = 0; i < menus.size(); i++){
+	    	
+	    	  	Menu menu = menus.get(i);
+	    	    Long q = quantity.get(i);
+	    		content += "| " + String.format("%-45s",menu.getName())+"--->"+q+"\n";
+	    	}
 	    
+
+	    content += "--------------------------------------------------\n";
+
 	    helper.setSubject(subject);
-	     
-//	    msg.setText(content);
-	    String foodcontent = content;
-	    for(Menu menu:menus) {
-	    	 foodcontent += "\n"+"Food :"+menu.getName();
-	    }
-	    helper.setText(foodcontent);
+	    helper.setText(content);
+
 	   
 	    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 	    Document document = new Document();
 	    PdfWriter.getInstance(document, outputStream);
 	    document.open();
-	    document.add(new Paragraph("Order details"));
-	    //document.add(new Paragraph("Name:"+email.getFirstName()+email.getLastName()));
-        document.add(new Paragraph(foodcontent));
-//	    document.add(new Paragraph("Order total: $" + order.getTotal()));
+	    document.add(new Paragraph("Welcome  to  Our restaurant"));
+        document.add(new Paragraph(content));
+        document.add(new Paragraph("Order Confirmed"));
 	    document.close();
 	    
 
 	    DataSource attachment = new ByteArrayDataSource(outputStream.toByteArray(), "application/pdf");
-	    helper.addAttachment("order.pdf", attachment);
-//	    ByteArrayDataSource dataSource = new ByteArrayDataSource( "application/pdf");
-//	    helper.addAttachment("order-"  + ".pdf", dataSource);
+	    helper.addAttachment("orderBil.pdf", attachment);
 
 	    mailSender.send(msg);
 	    
 	}
 
 	private Double calculateTotal(List<SelectedFoodDto> selectedFoods, List<Menu> menus) {
-		// check the id from menu and selected food
 		List<Long> menuIds = selectedFoods.stream().map(SelectedFoodDto::getMenuId)
 				.filter(Objects::nonNull)
 				.collect(Collectors.toList());

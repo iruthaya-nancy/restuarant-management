@@ -1,43 +1,28 @@
 package com.example.restaurant.model;
 
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 
 @Entity
-@Table(name ="AREA")
+@Table(name = "AREA")
 public class Area {
 	@Id
 	@Column(name = "ID")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-//	@Column(name = "DOOR_NO",unique = true,nullable = false)
-//	private String doorNo;
-//	
-//	@Column(name  = "STREET_NAME",length = 100,unique = true,nullable = false)
-//	private String streetName;
-	
-	@Column(name = "NAME",unique = true)
+
+	@Column(name = "NAME", unique = true)
 	private String name;
-	
+
 	@Column(name = "PINCODE", unique = true)
 	private Long pincode;
-	
+
 	@Column(name = "IS_ACTIVE")
 	private Boolean isActive;
-//	
-//	
-//	@ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "CUSTOMER_ID")
-//	private Customer customer;
 
 	public Long getId() {
 		return id;
@@ -46,22 +31,6 @@ public class Area {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
-//	public String getDoorNo() {
-//		return doorNo;
-//	}
-//
-//	public void setDoorNo(String doorNo) {
-//		this.doorNo = doorNo;
-//	}
-//
-//	public String getStreetName() {
-//		return streetName;
-//	}
-//
-//	public void setStreetName(String streetName) {
-//		this.streetName = streetName;
-//	}
 
 	public String getName() {
 		return name;
@@ -87,27 +56,17 @@ public class Area {
 		this.isActive = isActive;
 	}
 
-//	public Customer getCustomer() {
-//		return customer;
-//	}
-//
-//	public void setCustomer(Customer customer1) {
-//		this.customer = customer1;
-//	}
-	
-	
-	public Area(Long id, String doorNo,String streetName,String name, Long pincode, Boolean isActive) {
+	public Area(Long id, String doorNo, String streetName, String name, Long pincode, Boolean isActive) {
 		super();
 		this.id = id;
-//		this.doorNo = doorNo;
-//		this.streetName = streetName;
+
 		this.name = name;
 		this.pincode = pincode;
 		this.isActive = isActive;
 	}
 
 	public Area() {
-		// TODO Auto-generated constructor stub
+
 	}
 
 }

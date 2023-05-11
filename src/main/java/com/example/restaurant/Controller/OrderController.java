@@ -24,20 +24,21 @@ import jakarta.mail.MessagingException;
 @RestController
 @RequestMapping("/order")
 @CrossOrigin("*")
-public class OrderController {  
+public class OrderController {
 	@Autowired
 	private OrderServiceImpl orderService;
-	
+
 	@PostMapping
-	public ResponseEntity<HttpStatusResponse> toCreateOrder(@RequestBody List<SelectedFoodDto> selectedFoods,@RequestParam(value = "id")Long id,@RequestParam(value = "paymentid")Long paymentid) throws UnsupportedEncodingException, MessagingException{
+	public ResponseEntity<HttpStatusResponse> toCreateOrder(@RequestBody List<SelectedFoodDto> selectedFoods,
+			@RequestParam(value = "id") Long id, @RequestParam(value = "paymentid") Long paymentid)
+			throws UnsupportedEncodingException, MessagingException {
 		try {
-		    Long orderId = orderService.createOrder(selectedFoods,id,paymentid);
-		 
-		    return ResponseUtils.prepareSuccessResponse(null, orderId);
-		}
-		catch(BusinessServiceException exception) {
-					return ResponseUtils.prepareUnProcessableEntityResponse(
-				"Failed to create Order .Please enter the suitable data");
+			Long orderId = orderService.createOrder(selectedFoods, id, paymentid);
+
+			return ResponseUtils.prepareSuccessResponse(null, orderId);
+		} catch (BusinessServiceException exception) {
+			return ResponseUtils
+					.prepareUnProcessableEntityResponse("Failed to create Order .Please enter the suitable data");
 		}
 	}
 }

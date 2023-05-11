@@ -28,17 +28,12 @@ public class SelectedFood {
 	@Column(name = "QUANTITY", columnDefinition = "int default 1")
 	private Long quantity;
 
-	//@Column(name = "QUANTITY_AMOUNT", precision = 10, scale = 2)
-	//private BigDecimal quantityAmount;
 	
-
-	// multiple food selected
 	@ManyToOne(fetch = FetchType.LAZY )
 	@JoinColumn(name = "MENU_ID")
-	//private Menu menu;
 	private Menu menu;
 
-	// multiple food will be one order
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "ORDER_ID")
 	private Order order;
@@ -68,24 +63,6 @@ public class SelectedFood {
 	public void setQuantity(Long quantity) {
 		this.quantity = quantity;
 	}
-
-	/*public BigDecimal getQuantityAmount() {
-		return quantityAmount;
-	}
-
-	public void setQuantityAmount(BigDecimal quantityAmount) {
-		this.quantityAmount = quantityAmount;
-	}
-
-	public Menu getMenu() {
-		return menu;
-	}
-
-	public void setMenu(Menu menu) {
-		this.menu = menu;
-	}*/
-	
-	
 
 	public Order getOrder() {
 		return order;

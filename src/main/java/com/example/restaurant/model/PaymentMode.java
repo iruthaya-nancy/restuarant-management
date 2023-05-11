@@ -5,14 +5,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "PAYMENT_MODE")
 public class PaymentMode {
-
-	
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +18,7 @@ public class PaymentMode {
 
 	@Column(name = "NAME", length = 20)
 	private String name;
-	
+
 	@Column(name = "IS_ACTIVE")
 	private Boolean isActive;
 
@@ -53,10 +50,11 @@ public class PaymentMode {
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
 	}
-	
-	public PaymentMode() {}
-	
-	public PaymentMode(Long id,String name) {
+
+	public PaymentMode() {
+	}
+
+	public PaymentMode(Long id, String name) {
 		this.id = id;
 		this.name = name;
 	}

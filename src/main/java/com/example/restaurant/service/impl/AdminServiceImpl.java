@@ -9,19 +9,15 @@ import org.springframework.stereotype.Service;
 import com.example.restaurant.dto.AdminDto;
 import com.example.restaurant.dto.AreaDto;
 import com.example.restaurant.dto.DistrictDto;
-import com.example.restaurant.dto.LoginDto;
-import com.example.restaurant.dto.MenuDto;
 import com.example.restaurant.dto.PaymentDto;
 import com.example.restaurant.dto.StateDto;
 import com.example.restaurant.exception.BusinessServiceException;
-import com.example.restaurant.exception.ContraintViolationException;
+import com.example.restaurant.exception.ConstraintViolationException;
 import com.example.restaurant.exception.InternalServerException;
 import com.example.restaurant.exception.NotFoundException;
 import com.example.restaurant.model.Admin;
 import com.example.restaurant.model.Area;
-import com.example.restaurant.model.Customer;
 import com.example.restaurant.model.District;
-import com.example.restaurant.model.Menu;
 import com.example.restaurant.model.PaymentMode;
 import com.example.restaurant.model.State;
 import com.example.restaurant.repository.AdminRepository;
@@ -53,7 +49,7 @@ public class AdminServiceImpl implements AdminService {
 	@Autowired
 	private MenuRepository menuRepo;
 	
-	public void insertArea(AreaDto areadto) throws ContraintViolationException{
+	public void insertArea(AreaDto areadto) throws ConstraintViolationException{
 		if(areadto!=null) {
 		Area area = new Area();
 		area.setId(areadto.getId());
@@ -63,7 +59,7 @@ public class AdminServiceImpl implements AdminService {
 		areaRepo.save(area);
 		}
 		else {
-			throw new ContraintViolationException("Please enter the proper data");
+			throw new ConstraintViolationException("Please enter the proper data");
 		}
 	}
 
@@ -77,7 +73,7 @@ public class AdminServiceImpl implements AdminService {
 		
 	}
 
-	public void insertDistrict(DistrictDto districtdto) throws ContraintViolationException {
+	public void insertDistrict(DistrictDto districtdto) throws ConstraintViolationException {
 		if(districtdto!=null) {
 			District district = new District();
 			district.setId(districtdto.getId());
@@ -86,7 +82,7 @@ public class AdminServiceImpl implements AdminService {
 			districtRepo.save(district);
 			}
 			else {
-				throw new ContraintViolationException("Please enter the proper data");
+				throw new ConstraintViolationException("Please enter the proper data");
 			}
 		
 	}
@@ -101,7 +97,7 @@ public class AdminServiceImpl implements AdminService {
 		
 	}
 
-	public void insertState(StateDto statedto) throws ContraintViolationException {
+	public void insertState(StateDto statedto) throws ConstraintViolationException {
 	if(statedto!=null) {
 		State state = new State();
 		state.setId(statedto.getId());
@@ -110,7 +106,7 @@ public class AdminServiceImpl implements AdminService {
 		stateRepo.save(state);
 	}
 	else {
-		throw new ContraintViolationException("Please enter the proper data");
+		throw new ConstraintViolationException("Please enter the proper data");
 	}
 		
 	}
@@ -127,7 +123,7 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public List<AreaDto> getArea() throws InternalServerException {
-		// TODO Auto-generated method stub
+		
 		
 			List<Area> Areas = areaRepo.findAll();
 			List<AreaDto> area = new ArrayList<>();
@@ -135,8 +131,6 @@ public class AdminServiceImpl implements AdminService {
 				AreaDto dto = new AreaDto();
 				dto.setId(a.getId());
 				dto.setName(a.getName());
-				//dto.setDescription(item.getDescription());
-				//dto.setIsActive(item.getIsActive());
 				dto.setPincode(a.getPincode());
 			    area.add(dto);
 			}
@@ -146,33 +140,26 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public List<DistrictDto> getDistrict() throws InternalServerException {
-		// TODO Auto-generated method stub
 		List<District> districts = districtRepo.findAll();
 		List<DistrictDto> district = new ArrayList<>();
 		for (District d: districts) {
 			DistrictDto dto = new DistrictDto();
 			dto.setId(d.getId());
 			dto.setName(d.getName());
-			//dto.setDescription(item.getDescription());
-			//dto.setIsActive(item.getIsActive());
-			//dto.setPincode(a.getPincode());
-		    district.add(dto);
+			district.add(dto);
 		}
 		return district;
 	}
 
 	@Override
 	public List<StateDto> getState() throws InternalServerException {
-		// TODO Auto-generated method stub
+	
 		List<State> states = stateRepo.findAll();
 		List<StateDto> state = new ArrayList<>();
 		for (State s : states) {
 			StateDto dto = new StateDto();
 			dto.setId(s.getId());
 			dto.setName(s.getName());
-			//dto.setDescription(item.getDescription());
-			//dto.setIsActive(item.getIsActive());
-			//dto.setPincode(a.getPincode());
 		    state.add(dto);
 		}
 		return state;
@@ -193,8 +180,8 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public Long authenticateAdmin(AdminDto adminDto) throws NotFoundException{
-		// TODO Auto-generated method stub
-		Admin admin = adminRepo.findByFirstNameAndPassword(adminDto.getFirstName(),adminDto.getPassword());
+		
+		Admin admin = adminRepo.findByEmailAndPassword(adminDto.getEmail(),adminDto.getPassword());
 		if(admin!=null) {
 			return admin.getId();
 		}
@@ -205,26 +192,26 @@ public class AdminServiceImpl implements AdminService {
 	
 	}
 	
-	public void updateStatus(Long id) throws NotFoundException {
-		boolean status;
-		Menu menu = menuRepo.findById(id).get();
-		if(menu!=null)
-		
-		{
-	    if(menu.getIsActive() == true) {
-	    	status = false;
-	    	menu.setIsActive(status);
-	    }
-	    else {
-	    	status = true;
-	    	menu.setIsActive(status);
-	    }
-	    menuRepo.save(menu);
-		}
-		else {
-			throw new NotFoundException("the food not available");
-		}
-	}
+//	public void updateStatus(Long id) throws NotFoundException {
+//		boolean status;
+//		Menu menu = menuRepo.findById(id).get();
+//		if(menu!=null)
+//		
+//		{
+//	    if(menu.getIsActive() == true) {
+//	    	status = false;
+//	    	menu.setIsActive(status);
+//	    }
+//	    else {
+//	    	status = true;
+//	    	menu.setIsActive(status);
+//	    }
+//	    menuRepo.save(menu);
+//		}
+//		else {
+//			throw new NotFoundException("the food not available");
+//		}
+//	}
 	
 	
 	

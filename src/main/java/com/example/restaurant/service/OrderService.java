@@ -3,7 +3,6 @@ package com.example.restaurant.service;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
-import com.example.restaurant.dto.OrderDto;
 import com.example.restaurant.dto.SelectedFoodDto;
 import com.example.restaurant.exception.BusinessServiceException;
 import com.itextpdf.text.DocumentException;

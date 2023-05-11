@@ -14,15 +14,26 @@ public class Admin {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
 	private Long id;
-	
-	@Column(name = "FIRST_NAME",length = 50)
+
+	@Column(name = "FIRST_NAME", length = 50)
 	private String firstName;
-	
-	@Column(name = "LAST_NAME",length = 50)
+
+	@Column(name = "LAST_NAME", length = 50)
 	private String lastName;
-	
-	@Column(name = "PASSWORD",nullable = false)
+
+	@Column(name = "PASSWORD", nullable = false)
 	private String password;
+
+	@Column(name = "EMAIL", nullable = false)
+	private String email;
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
 	public Long getId() {
 		return id;
@@ -55,9 +66,5 @@ public class Admin {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
-	
-	
-	
 
 }

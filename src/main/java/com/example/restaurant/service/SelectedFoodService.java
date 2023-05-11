@@ -1,6 +1,5 @@
 package com.example.restaurant.service;
 
-import java.math.BigDecimal;
 
 public interface SelectedFoodService {
 	

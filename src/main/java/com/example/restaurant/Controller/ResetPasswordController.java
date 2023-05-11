@@ -39,7 +39,7 @@ public class ResetPasswordController {
             return ResponseEntity.badRequest().body("User not found");
         }
         String token = UUID.randomUUID().toString();
-        customerService.createPasswordResetTokenForUser(token,resetPasswordRequest.getEmail());
+        //customerService.createPasswordResetTokenForUser(token,resetPasswordRequest.getEmail());
         String resetPasswordLink = resetPasswordRequest.getResetPasswordLink() + "?token=" + token;
         emailService.sendEmail(user.getEmail(), resetPasswordLink);
         return ResponseEntity.ok().body("Reset password link has been sent to your email");

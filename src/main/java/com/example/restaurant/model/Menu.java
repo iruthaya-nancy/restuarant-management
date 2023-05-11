@@ -1,24 +1,22 @@
 package com.example.restaurant.model;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
+
 import java.util.Date;
-import java.util.List;
+
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
-// one to many relation with the selected food items not with the customer
+
 @Entity
 @Table(name = "MENU")
 public class Menu {
@@ -38,9 +36,6 @@ public class Menu {
 	
 	@Column(name = "IS_ACTIVE")
 	private Boolean isActive;
-//	
-//	@OneToMany(mappedBy = "menu", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<SelectedFood> food;
 
 	@CreationTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
@@ -92,13 +87,7 @@ public class Menu {
 		this.isActive = isActive;
 	}
 
-//	public List<SelectedFood> getFood() {
-//		return food;
-//	}
-//
-//	public void setFood(List<SelectedFood> food) {
-//		this.food = food;
-//	}
+
 
 	public Menu(Long id) {
 		super();

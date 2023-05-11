@@ -2,20 +2,16 @@ package com.example.restaurant.service.impl;
 
 import java.util.Objects;
 import java.util.Optional;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.example.restaurant.dto.AreaDto;
 import com.example.restaurant.dto.CustomerDto;
-import com.example.restaurant.dto.MenuDto;
 import com.example.restaurant.dto.OrderDto;
 import com.example.restaurant.dto.OrderEmail;
 import com.example.restaurant.model.Area;
 import com.example.restaurant.model.Customer;
 import com.example.restaurant.model.District;
-import com.example.restaurant.model.Menu;
 import com.example.restaurant.model.Order;
 import com.example.restaurant.model.SelectedFood;
 import com.example.restaurant.model.State;
@@ -85,10 +81,8 @@ public class OrderMailServiceImpl implements OrderMailService {
 	//to get area
 	private  AreaDto convertAreaToDto(Area area) {
 		AreaDto areadto = modelmapper.map(area, AreaDto.class);
-		//areadto.setId(area.getId());
 		areadto.setName(area.getName());
-		areadto.setPincode(area.getId());
-		//areadto.setIsActive(area.getIsActive());
+		areadto.setPincode(area.getPincode());
 		return areadto;
 		
 	}
@@ -115,11 +109,6 @@ public class OrderMailServiceImpl implements OrderMailService {
 		return  selectedFoods.getQuantity();	
 	}
 	
-	
-//	private  List<MenuDto> toConvertMenutoDto(SelectedFood selectedfoods) {
-//		MenuDto menuDto = modelmapper.map(menu,MenuDto.class);
-//		List
-//	}
 	
 
 }

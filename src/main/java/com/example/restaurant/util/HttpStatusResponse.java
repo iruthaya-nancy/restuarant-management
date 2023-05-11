@@ -145,6 +145,16 @@ public class HttpStatusResponse implements Serializable {
 		
 		return httpResponse;
 	}
+
+
+
+	public static Object setHttpCostraintResponse(Integer code, String description) {
+		// TODO Auto-generated method stub
+		HttpStatusResponse httpResponse = new HttpStatusResponse();
+		httpResponse.setStatusCode(code);
+		httpResponse.setDescription(description);
+		return httpResponse;
+	}
 	
 	
     

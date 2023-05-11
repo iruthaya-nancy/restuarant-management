@@ -22,7 +22,7 @@ import com.example.restaurant.dto.MenuDto;
 import com.example.restaurant.dto.PaymentDto;
 import com.example.restaurant.dto.StateDto;
 import com.example.restaurant.exception.BusinessServiceException;
-import com.example.restaurant.exception.ContraintViolationException;
+import com.example.restaurant.exception.ConstraintViolationException;
 import com.example.restaurant.exception.InternalServerException;
 import com.example.restaurant.exception.NotFoundException;
 import com.example.restaurant.service.AdminService;
@@ -46,7 +46,6 @@ public class AdminController {
 			session.setAttribute("customer", customer);
 			return ResponseUtils.prepareSuccessResponse(null, customer);
 		} catch (NotFoundException exception) {
-			// TODO Auto-generated catch block
 			return ResponseUtils.prepareUnAuthorizedResponse("Invalid Username or Password");
 		}
 	}
@@ -59,7 +58,7 @@ public class AdminController {
 			adminService.insertArea(areadto);
 			return ResponseUtils.prepareAcceptedResponse("Added Successfully", areadto);
 		}
-		catch(ContraintViolationException exception) {
+		catch(ConstraintViolationException exception) {
 			return ResponseUtils.prepareUnProcessableEntityResponse("Failed to insert Area.Please enter the valid data");
 		}
 	}
@@ -77,9 +76,6 @@ public class AdminController {
 	@GetMapping("/area")
 	public ResponseEntity<HttpStatusResponse> toGetArea(HttpSession session) {
 		try {
-			// Customer customer = (Customer) session.getAttribute("customer");// stores the
-			// customer data in session
-			// if (customer != null) {
 			List<AreaDto> area = adminService.getArea();
 			return ResponseUtils.prepareSuccessResponse(null, area);
 		} catch (InternalServerException exception) {
@@ -95,7 +91,7 @@ public class AdminController {
 			adminService.insertDistrict(districtdto);
 			return ResponseUtils.prepareAcceptedResponse("Added Successfully", districtdto);
 		}
-		catch(ContraintViolationException exception) {
+		catch(ConstraintViolationException exception) {
 			return ResponseUtils.prepareUnProcessableEntityResponse("Failed to insert District.Please enter the valid data");
 		}
 	}
@@ -113,9 +109,7 @@ public class AdminController {
 	@GetMapping("/district")
 	public ResponseEntity<HttpStatusResponse> toGetDistrict(HttpSession session) {
 		try {
-			// Customer customer = (Customer) session.getAttribute("customer");// stores the
-			// customer data in session
-			// if (customer != null) {
+			
 			List<DistrictDto> district = adminService.getDistrict();
 			return ResponseUtils.prepareSuccessResponse(null, district);
 		} catch (InternalServerException exception) {
@@ -130,7 +124,7 @@ public class AdminController {
 			adminService.insertState(statedto);
 			return ResponseUtils.prepareAcceptedResponse("Added Successfully", statedto);
 		}
-		catch(ContraintViolationException exception) {
+		catch(ConstraintViolationException exception) {
 			return ResponseUtils.prepareUnProcessableEntityResponse("Failed to insert state .Please enter the valid data");
 		}
 	}
@@ -148,9 +142,7 @@ public class AdminController {
 	@GetMapping("/state")
 	public ResponseEntity<HttpStatusResponse> toGetState(HttpSession session) {
 		try {
-			// Customer customer = (Customer) session.getAttribute("customer");// stores the
-			// customer data in session
-			// if (customer != null) {
+			
 			List<StateDto> state = adminService.getState();
 			return ResponseUtils.prepareSuccessResponse(null, state);
 		} catch (InternalServerException exception) {
@@ -161,26 +153,13 @@ public class AdminController {
 	@GetMapping("/paymentMode")
 	public ResponseEntity<HttpStatusResponse> toGetPaymentMode(HttpSession session) {
 		try {
-			// Customer customer = (Customer) session.getAttribute("customer");// stores the
-			// customer data in session
-			// if (customer != null) {
+		
 			List<PaymentDto> mode = adminService.getPaymentMode();
 			return ResponseUtils.prepareSuccessResponse(null, mode);
 		} catch (InternalServerException exception) {
 			return ResponseUtils.prepareNoRecordFoundResponse("Mode not Available");
 		}
 	}
-	
-	@PatchMapping("/update")
-	public ResponseEntity<HttpStatusResponse> toUpdateStatus(@RequestParam("id") Long id){
-		try {
-		adminService.updateStatus(id);
-		return ResponseUtils.prepareSuccessResponse(null,id);
-		}
-		catch(NotFoundException exception) {
-			return ResponseUtils.prepareNoRecordFoundResponse("requested menu not found");
-			}
-		}
-	
+
 	
 }

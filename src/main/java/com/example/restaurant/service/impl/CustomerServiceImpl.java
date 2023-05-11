@@ -1,15 +1,15 @@
 package com.example.restaurant.service.impl;
 
-import java.time.LocalDateTime;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,9 +17,8 @@ import com.example.restaurant.dto.CustomerDto;
 
 import com.example.restaurant.dto.LoginDto;
 import com.example.restaurant.dto.MenuDto;
-import com.example.restaurant.dto.SelectedFoodDto;
 import com.example.restaurant.exception.BusinessServiceException;
-import com.example.restaurant.exception.ContraintViolationException;
+import com.example.restaurant.exception.DuplicateException;
 import com.example.restaurant.exception.InternalServerException;
 import com.example.restaurant.exception.NotFoundException;
 import com.example.restaurant.model.Area;
@@ -38,14 +37,12 @@ import com.example.restaurant.repository.OrderRepository;
 import com.example.restaurant.repository.SelectedFoodRepository;
 
 import com.example.restaurant.service.CustomerService;
-import com.example.restaurant.service.EmailService;
 
 import jakarta.transaction.Transactional;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
-	
-	private Object passwordResetTokenExpiration;
+
 	
 	@Autowired
 	private CustomerRepository customerRepo;
@@ -68,11 +65,12 @@ public class CustomerServiceImpl implements CustomerService {
 
 
 	@Transactional // signup
-	public Long insertCustomer(CustomerDto customerdto) throws ContraintViolationException
+	public Long insertCustomer(CustomerDto customerdto) throws DuplicateException
 	{
 		Customer customer;
 		if(customerdto!=null)
 		{
+			try {
 		    customer = new Customer();
 			customer.setFirstName(customerdto.getFirstName());
 			customer.setLastName(customerdto.getLastName());
@@ -91,47 +89,14 @@ public class CustomerServiceImpl implements CustomerService {
 			State state = this.modelMapper.map(customerdto.getState(), State.class);
 			customer.setState(state);
 			customerRepo.save(customer);
-			// for address
-//		List<AreaDto> addressDtos = customerdto.getAddress();
-//		if (addressDtos != null && !addressDtos.isEmpty()) {
-//			List<Area> addresses = new ArrayList<>();
-//			for (AreaDto addressDto : addressDtos) {
-//				Area address = this.modelMapper.map(addressDto, Area.class);
-//				address.setCustomer(customer);
-//				addresses.add(address);
-//				addressRepo.save(address);
-//			}
-//			customer.setAddress(addresses);
-//			// customerRepo.save(customer);
-//		}
-//		// for district
-//		List<DistrictDto> districtDtos = customerdto.getDistrict();
-//		if (districtDtos != null && !districtDtos.isEmpty()) {
-//			List<District> districts = new ArrayList<>();
-//			for (DistrictDto districtdto : districtDtos) {
-//				District district = this.modelMapper.map(districtdto, District.class);
-//				district.setCustomer(customer);
-//				districts.add(district);
-//				districtRepo.save(district);
-//			}
-//			customer.setDistrict(districts);
-//			// customerRepo.save(customer);
-//		}
-//		// for state
-//		List<StateDto> stateDtos = customerdto.getState();
-//		if (stateDtos != null && !stateDtos.isEmpty()) {
-//			List<State> states = new ArrayList<>();
-//			for (StateDto statedto : stateDtos) {
-//				State state = this.modelMapper.map(statedto, State.class);
-//				state.setCustomer(customer);
-//				states.add(state);
-//				stateRepo.save(state);
-//			}
-//			customer.setState(states);
-			//return customer.getId();
+			}catch(DataIntegrityViolationException e) {
+				throw new DuplicateException(e,"User Already exist");
+			}
+			
+			
 		} 
 		else {
-			throw new ContraintViolationException("Please check the data");
+			throw new DuplicateException("User Already exist");
 		}
 		return customer.getId();
 	}
@@ -202,7 +167,6 @@ public class CustomerServiceImpl implements CustomerService {
 	// add items to selected food to view another api
 	public void selectTheFoodItem(Long id, Long quantity) throws BusinessServiceException{
 		Optional<Menu> menuItem = menuRepo.findById(id);
-		// List<SelectedFoodDto> selectFood = new ArrayList<>();
 		if (menuItem.isPresent()) {
 			Order o = new Order();
 			Menu menu = menuItem.get();
@@ -225,44 +189,7 @@ public class CustomerServiceImpl implements CustomerService {
 		}
 	}
   
-	// password resetting
-	public void updateResetPasswordToken(String token, String email) throws NotFoundException {
-		Customer customer = customerRepo.findByEmail(email);
-		if (customer != null) {
-			customer.setResetPasswordToken(token);
-			customerRepo.save(customer);
-		} else {
-			throw new NotFoundException("Could not find any customer with the email " + email);
-		}
-	}
-
-	public Customer getByResetPasswordToken(String token) {
-		return customerRepo.findByResetPasswordToken(token);
-	}
-
-	public void updatePassword(Customer customer, String newPassword) {
-		String encodedPassword = passwordEncoder.encode(newPassword);
-		customer.setPassword(encodedPassword);
-
-		customer.setResetPasswordToken(null);
-		customerRepo.save(customer);
-	}
 	
-	public void createPasswordResetTokenForUser(String token,String email) {
-//		String token = null;
-        Customer user = customerRepo.findByEmail(email);
-        if (user != null) {
-////            String token = user.createPasswordResetTokenForUser();
-////            //customerRepo.save(user);
-////            emailService.sendPasswordResetToken(token);
-//        	token = UUID.randomUUID().toString();
-            user.setResetPasswordToken(token);
-            passwordResetTokenExpiration = LocalDateTime.now().plusHours(24);
-            customerRepo.save(user);
-        }
-		//return token;
-    }
-
 	
 	
 	

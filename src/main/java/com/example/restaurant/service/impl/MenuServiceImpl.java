@@ -3,18 +3,14 @@ package com.example.restaurant.service.impl;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.example.restaurant.dto.FoodSoldDto;
 import com.example.restaurant.dto.MenuDto;
 import com.example.restaurant.exception.BusinessServiceException;
-import com.example.restaurant.exception.ContraintViolationException;
+import com.example.restaurant.exception.ConstraintViolationException;
+import com.example.restaurant.exception.NotFoundException;
 import com.example.restaurant.model.Menu;
 import com.example.restaurant.repository.MenuRepository;
 import com.example.restaurant.service.MenuService;
@@ -26,9 +22,8 @@ public class MenuServiceImpl implements MenuService{
 	
 		
 	@Transactional
-	public void toInsertFoodToMenu(MenuDto menudto) throws ContraintViolationException{
+	public void toInsertFoodToMenu(MenuDto menudto) throws ConstraintViolationException{
 	 if(menudto != null) {
-		//Menu menu = this.modelMapper.map(menudto, Menu.class);
 		Menu menu = new Menu();
 		menu.setId(menudto.getId());
 		menu.setName(menudto.getName());
@@ -38,7 +33,7 @@ public class MenuServiceImpl implements MenuService{
 		menuRepo.save(menu);
 	 }
 	 else {
-		 throw new ContraintViolationException("Please enter the proper data");
+		 throw new ConstraintViolationException("Please enter the proper data");
 	 }
 	 
 	}
@@ -56,8 +51,9 @@ public class MenuServiceImpl implements MenuService{
 	}
 	
 	@Transactional 
-	public void toUpdateTheFood(Long id,BigDecimal price) throws BusinessServiceException
+	public void toUpdateTheFood(Long id,BigDecimal price) throws BusinessServiceException, NotFoundException
 	{
+		if(price != null) {
 		Menu updateMenu = menuRepo.findById(id).get();
 		if(updateMenu != null) {
 			updateMenu.setAmount(price);
@@ -66,11 +62,30 @@ public class MenuServiceImpl implements MenuService{
 		else {
 			throw new BusinessServiceException("Please enter the proper data");
 		}
+		}
+		else {
+			boolean status;
+			Menu menu = menuRepo.findById(id).get();
+			if(menu!=null)
+			
+			{
+		    if(menu.getIsActive() == true) {
+		    	status = false;
+		    	menu.setIsActive(status);
+		    }
+		    else {
+		    	status = true;
+		    	menu.setIsActive(status);
+		    }
+		    menuRepo.save(menu);
+			}
+			else {
+				throw new NotFoundException("the food not available");
+			}
+		}
 		
 	}
-	//conversion to dto is done in controller
-	//List<MenuDto> menu = (List<MenuDto>) this.modelMapper.map(menuDto, Menu.class);
-	// TODO Auto-generated method stub
+	
 	public List<Menu> toViewTheMenu() throws BusinessServiceException
 	{
 		
@@ -86,13 +101,7 @@ public class MenuServiceImpl implements MenuService{
 	public List<FoodSoldDto> toGetTheFoodSold(Date fromDate,Date toDate) throws BusinessServiceException
 	{
 	List<FoodSoldDto> foodSoldDto = menuRepo.findFoodSold(fromDate, toDate);
-			//.stream().map(e ->{
-//			FoodSoldDto food = new FoodSoldDto();
-//			food.setName(e.setFoodName());
-//			food.setCount(e.setFoodCount());
-//			return food;
-//		}).collect(Collectors.toList());
-//		
+		
 		if(foodSoldDto != null) {
 			           return foodSoldDto;
 		}

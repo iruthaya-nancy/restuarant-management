@@ -7,9 +7,8 @@ import org.springframework.stereotype.Repository;
 
 import com.example.restaurant.model.Area;
 
-
 @Repository
-public interface AreaRepository extends JpaRepository<Area,Long> {
+public interface AreaRepository extends JpaRepository<Area, Long> {
 
 	Optional<Area> findByPincode(Long pincode);
 

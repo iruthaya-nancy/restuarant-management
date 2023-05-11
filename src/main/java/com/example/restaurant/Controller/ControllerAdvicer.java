@@ -16,6 +16,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -23,15 +24,33 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import com.example.restaurant.exception.InternalServerException;
 import com.example.restaurant.util.HttpStatusResponse;
 import com.example.restaurant.util.ResponseUtils;
+import com.example.restaurant.exception.DuplicateException;
+import com.example.restaurant.exception.ConstraintViolationException;
 
 @ControllerAdvice
 public class ControllerAdvicer extends ResponseEntityExceptionHandler {
+	
+	
+	@ExceptionHandler(DuplicateException.class)
+	public ResponseEntity<String> duplicateException(DuplicateException e) {
+
+		 return ResponseEntity.status(HttpStatus.CONFLICT.value()).body(e.getMessage());
+
+	}
+	
 
 		
 	@ExceptionHandler(InternalServerException.class)
 	public ResponseEntity<HttpStatusResponse> InternalServiceException(InternalServerException ex) {
 		return ResponseUtils.prepareInternalServerErrorResponse("Internal server error");
 	}
+	
+	
+	@ExceptionHandler(ConstraintViolationException.class)
+	public ResponseEntity<HttpStatusResponse> constraintViolation(ConstraintViolationException ex,HttpHeaders headers, HttpStatus status, WebRequest request){
+		 return ResponseUtils.prepareConflictResponse(null)
+;	}
+
 
 
 	/**
@@ -65,7 +84,7 @@ public class ControllerAdvicer extends ResponseEntityExceptionHandler {
 	 */
 
 	protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException ex,
-			HttpHeaders headers, HttpStatus status, WebRequest request) {
+		HttpHeaders headers, HttpStatus status, WebRequest request) {
 		JSONObject jsonObject = new JSONObject();
 		Set<HttpMethod> supportedMethods = ex.getSupportedHttpMethods();
 		jsonObject.put("Unsupported HTTP method", ex.getMethod());
@@ -79,7 +98,7 @@ public class ControllerAdvicer extends ResponseEntityExceptionHandler {
 	 */
 
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-			HttpHeaders headers, HttpStatus status, WebRequest request) {
+		HttpHeaders headers, HttpStatus status, WebRequest request) {
 		JSONObject jsonObject = new JSONObject();
 		for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
 			jsonObject.put(fieldError.getField(), fieldError.getDefaultMessage());
@@ -106,7 +125,7 @@ public class ControllerAdvicer extends ResponseEntityExceptionHandler {
 	 */
 
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
-			HttpHeaders headers, HttpStatus status, WebRequest request) {
+		HttpHeaders headers, HttpStatus status, WebRequest request) {
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("message", "Wrong body or no body in request");
 		return new ResponseEntity<>(
